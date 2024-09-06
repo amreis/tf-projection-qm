@@ -1265,47 +1265,6 @@ files = [
 ]
 
 [[package]]
-name = "types-protobuf"
-version = "5.27.0.20240626"
-description = "Typing stubs for protobuf"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "types-protobuf-5.27.0.20240626.tar.gz", hash = "sha256:683ba14043bade6785e3f937a7498f243b37881a91ac8d81b9202ecf8b191e9c"},
-    {file = "types_protobuf-5.27.0.20240626-py3-none-any.whl", hash = "sha256:688e8f7e8d9295db26bc560df01fb731b27a25b77cbe4c1ce945647f7024f5c1"},
-]
-
-[[package]]
-name = "types-requests"
-version = "2.32.0.20240905"
-description = "Typing stubs for requests"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "types-requests-2.32.0.20240905.tar.gz", hash = "sha256:e97fd015a5ed982c9ddcd14cc4afba9d111e0e06b797c8f776d14602735e9bd6"},
-    {file = "types_requests-2.32.0.20240905-py3-none-any.whl", hash = "sha256:f46ecb55f5e1a37a58be684cf3f013f166da27552732ef2469a0cc8e62a72881"},
-]
-
-[package.dependencies]
-urllib3 = ">=2"
-
-[[package]]
-name = "types-tensorflow"
-version = "2.17.0.20240820"
-description = "Typing stubs for tensorflow"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "types-tensorflow-2.17.0.20240820.tar.gz", hash = "sha256:8259f4458776cad1abc799fc996c38e74f5d3b7b150f6683315f40164af71414"},
-    {file = "types_tensorflow-2.17.0.20240820-py3-none-any.whl", hash = "sha256:705d34b541b126d3b350e749de81db9a34bbe22a4c2bb6d491925c758144fe33"},
-]
-
-[package.dependencies]
-numpy = ">=1.20,<2.1.0"
-types-protobuf = "*"
-types-requests = "*"
-
-[[package]]
 name = "typing-extensions"
 version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -1465,4 +1424,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "0631384b62dd47f6df6c62ec4035c2d46b07919f4b3a2f29a76e894b57903968"
+content-hash = "81a26cce1c67d0007e62d6f819317305b4b394e64c91bd5b69bdf9f7294c26a5"

@@ -14,7 +14,6 @@ numpy = ">=1.24,<2.0"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
 scikit-learn = "^1.5.1"
-types-tensorflow = "^2.17.0.20240820"
 
 [build-system]
 requires = ["poetry-core"]
