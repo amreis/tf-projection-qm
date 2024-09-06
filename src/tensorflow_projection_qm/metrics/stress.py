@@ -40,6 +40,13 @@ def scaled_stress(X, X_2d, alpha=1.0):
 
 
 @tf.function
+def scale_normalized_stress_from_distances(D_high, D_low):
+    opt_alpha = tf.reduce_sum(D_high * D_low) / tf.reduce_sum(D_high**2)
+
+    return normalized_stress_from_distances(D_high, opt_alpha * D_low)
+
+
+@tf.function
 def scale_normalized_stress(X, X_2d):
     """A scale-invariant version of the Stress metric.
 
@@ -56,6 +63,4 @@ def scale_normalized_stress(X, X_2d):
     D_high = tf.sqrt(distance.psqdist(X))
     D_low = tf.sqrt(distance.psqdist(X_2d))
 
-    opt_alpha = tf.reduce_sum(D_high * D_low) / tf.reduce_sum(D_high**2)
-
-    return normalized_stress_from_distances(D_high, opt_alpha * D_low)
+    return scale_normalized_stress_from_distances(D_high, D_low)
