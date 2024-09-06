@@ -28,6 +28,23 @@ def test_1d_data():
     )
 
 
+def test_2d_data():
+    A = np.array([[1.0, 2.0], [2.0, 1.0], [0.0, 0.0], [-1.0, -0.5]])
+
+    my_res = distance.psqdist(A).numpy()
+
+    npt.assert_(my_res.shape == (4, 4))
+    npt.assert_array_equal(
+        my_res,
+        [
+            [0.0, 2.0, 5.0, 2**2 + 2.5**2],
+            [2.0, 0.0, 5.0, 3**2 + 1.5**2],
+            [5.0, 5.0, 0.0, 1.25],
+            [2**2 + 2.5**2, 3**2 + 1.5**2, 1.25, 0.0],
+        ],
+    )
+
+
 def test_big_matrix():
     A = np.arange(1000 * 250).reshape(1000, 250)
     my_res = distance.psqdist(A).numpy()
