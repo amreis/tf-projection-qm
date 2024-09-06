@@ -10,6 +10,7 @@ def trustworthiness_impl(X, X_2d, k) -> tf.Tensor:
     D_low = distance.psqdist(X_2d)
 
     n = tf.shape(D_high)[0]
+    # Ensures the first element of the result of argsort will be i at the ith row.
     D_high -= 1e-10 * tf.eye(n, dtype=tf.float64)
     D_low -= 1e-10 * tf.eye(n, dtype=tf.float64)
 
@@ -31,4 +32,4 @@ def trustworthiness_impl(X, X_2d, k) -> tf.Tensor:
 
 
 def trustworthiness(X, X_2d, k: int) -> tf.Tensor:
-    return trustworthiness_impl(X, X_2d, tf.constant(k))
+    return tf.reduce_mean(trustworthiness_impl(X, X_2d, tf.constant(k)))
