@@ -8,3 +8,62 @@ whether a sane projection has been produced by an algorithm (e.g, t-SNE, or UMAP
 
 In this repository, I aim to provide a comprehensive set of implementations of projection
 quality metrics that are fast and use idiomatic TensorFlow in their implementation.
+
+## Quality Metrics
+
+A quality metric is a function $\mathcal{M}_\eta$ with two arguments: a dataset $\mathbf{X} \in \mathbb{R}^{n\times D}$ of $D$-dimensional data points, and a corresponding projection $\mathbf{Y} = \mathcal{P}(\mathbb{X}) \in \mathbb{R}^{n\times d}$ where $d$ is usually 2 or 3.
+
+Projection algorithms can generate $\mathbf{Y}$ in many ways. Of course, not all such projections are equally useful and/or truthful to the data they are based on. While some techniques might be better at representing global aspects of the original dataset $\mathbf{X}$, others might instead favor local neighborhood preservation.
+
+Each $\mathcal{M}_\eta(\mathbf{X}, \mathbf{Y})$ returns a single score representing the quality of $\mathbf{Y}$ as a projection for $\mathbb{X}$. Different quality metrics aim to evaluate different aspects of _data pattern preservation_. For example, Trustworthiness is a metric that aims to evaluate the amount of false neighbors introduced in a projection -- that is to say, points that were not close in $D$-dimensional space and have been _wrongfully_ brought together by $\mathcal{P}$. Stress is another metric, aimed at measuring discrepancies in pairwise distances in $\mathbf{X}$ when compared to pairwise distances in $\mathbf{Y}$.
+
+## Installation
+
+Installation is possible using `pip` directly:
+
+```bash
+pip install tensorflow-projection-qm
+```
+
+## Using
+
+The functions that calculate the quality metrics all sit in the `tensorflow_projection_qm.metrics` package.
+
+```python
+from tensorflow_projection_qm.metrics import continuity, trustworthiness
+
+# Set up some fake data
+import numpy as np
+X = np.random.randn(100, 5)  # 100 data points with 5 dimensions.
+
+# Project to 2-D with TSNE
+from sklearn.manifold import TSNE
+X_proj = TSNE(n_components=2).fit_transform(X).astype(X.dtype)
+
+# Evaluate the projection:
+C = continuity(X, X_proj, k=21).numpy()
+T = trustworthiness(X, X_proj, k=21).numpy()
+print(f"Continuity: {C}")
+print(f"Trustworthiness: {T}")
+```
+
+## Why this package?
+
+I have a recurring need in my research (see [About Me](#about-me) below) to evaluate different projection algorithms with respect to different quality metrics. While there are some libraries for this, and I am grateful for their authors' work in gathering and implementing different quality metrics (see, for example, [ZADU](https://github.com/hj-n/zadu)), I have found some implementations to not be as performant as I need them to be (keep in mind I evaluate thousands of projections at a time), and sometimes buggy.
+
+At some point I noticed I had been re-implementing the same quality metrics over and over again, sometimes introducing bugs myself due to mistakes when copying and adapting code from a public source, such as Espadoto's comprehensive [survey](https://github.com/mespadoto/dlmp).
+
+Instead, I have chosen to start this package with the goals of:
+
+1. Having easy access to standard implementations of projection quality metrics;
+2. Implementing quality metrics in _vectorized_ manners as often as possible, taking advantage of parallel execution for speeding up calculations;
+3. Sharing this code openly as my first package to be published on PyPi.org;
+4. Using an easily-available framework (TensorFlow) to back up my implementations and seamlessly take advantage of GPUs when available.
+
+## About
+
+This package is under active development, and is **very much** in its early stages. Please feel free to report bugs, but also be mindful that this is a best-effort attempt to generalize/speed up my own implementations of quality metrics.
+
+## About Me
+
+My name is Alister Machado, I am a PhD Candidate researching Data Visualization (more specifically focused in dimensionality reduction and explainable AI). I am the person behind [ShaRP](https://github.com/amreis/sharp) and the [Differentiable DBMs](https://github.com/amreis/differentiable-dbm). You can check out my research [here](https://scholar.google.com.br/citations?user=WVXX6mYAAAAJ&hl=en). I am currently in the 4th year of my PhD (out of 5 total), and am expected to graduate in 2026. Feel free to reach out!
