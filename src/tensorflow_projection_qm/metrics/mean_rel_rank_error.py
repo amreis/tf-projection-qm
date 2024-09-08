@@ -7,21 +7,18 @@ by Lee and Verleysen (2007), Chapter 6.
 
 import tensorflow as tf
 
-from tensorflow_projection_qm.util.distance import psqdist
+from tensorflow_projection_qm.util import distance
 
 
 @tf.function
 def mrre_data_impl(X, X_2d, k):
     n = tf.shape(X)[0]
-    D_high = psqdist(X)
-    D_low = psqdist(X_2d)
+    D_high = distance.psqdist(X)
+    D_low = distance.psqdist(X_2d)
 
-    D_high -= 1e-10 * tf.eye(n, dtype=tf.float64)
-    D_low -= 1e-10 * tf.eye(n, dtype=tf.float64)
-
-    nn_orig = tf.argsort(D_high)
+    nn_orig = distance.sort_distances(D_high)
     ixs_orig = tf.argsort(nn_orig)
-    nn_proj = tf.argsort(D_low)
+    nn_proj = distance.sort_distances(D_low)
     knn_proj = nn_proj[:, 1 : k + 1]
 
     orig_ranks = tf.gather(ixs_orig, knn_proj, batch_dims=-1)
@@ -39,15 +36,12 @@ def mrre_data_impl(X, X_2d, k):
 @tf.function
 def mrre_proj_impl(X, X_2d, k):
     n = tf.shape(X)[0]
-    D_high = psqdist(X)
-    D_low = psqdist(X_2d)
+    D_high = distance.psqdist(X)
+    D_low = distance.psqdist(X_2d)
 
-    D_high -= 1e-10 * tf.eye(n, dtype=tf.float64)
-    D_low -= 1e-10 * tf.eye(n, dtype=tf.float64)
-
-    nn_orig = tf.argsort(D_high)
+    nn_orig = distance.sort_distances(D_high)
     knn_orig = nn_orig[:, 1 : k + 1]
-    nn_proj = tf.argsort(D_low)
+    nn_proj = distance.sort_distances(D_low)
     ixs_proj = tf.argsort(nn_proj)
 
     proj_ranks = tf.gather(ixs_proj, knn_orig, batch_dims=-1)

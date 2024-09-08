@@ -10,12 +10,9 @@ def continuity_impl(X, X_2d, k) -> tf.Tensor:
     D_low = distance.psqdist(X_2d)
 
     n = tf.shape(D_high)[0]
-    # Ensures the first element of the result of argsort will be i at the ith row.
-    D_high -= 1e-10 * tf.eye(n, dtype=tf.float64)
-    D_low -= 1e-10 * tf.eye(n, dtype=tf.float64)
 
-    nn_orig = tf.argsort(D_high)
-    nn_proj = tf.argsort(D_low)
+    nn_orig = distance.sort_distances(D_high)
+    nn_proj = distance.sort_distances(D_low)
     ixs_proj = tf.argsort(nn_proj)
 
     knn_orig = nn_orig[:, 1 : k + 1]
