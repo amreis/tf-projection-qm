@@ -4,10 +4,25 @@ version = "0.1.0"
 description = "A package with fast, TensorFlow-based implementations of projection (i.e., dimensionality reduction) quality metrics."
 authors = ["Alister Machado <alister.reis@gmail.com>"]
 readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/amreis/tf-projection-qm"
+repository = "https://github.com/amreis/tf-projection-qm"
+keywords = [
+    "projection",
+    "dimensionality reduction",
+    "quality metrics",
+    "data visualization",
+    "visualization",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Development Status :: 3 - Alpha",
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-tensorflow = {extras = ["and-cuda"], version = "^2.17.0"}
+tensorflow = { extras = ["and-cuda"], version = "^2.17.0" }
 numpy = ">=1.24,<2.0"
 
 
