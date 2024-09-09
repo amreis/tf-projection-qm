@@ -25,7 +25,7 @@ def trustworthiness_impl(X, X_2d, k) -> tf.Tensor:
     k = tf.cast(k, tf.float64)
     n = tf.cast(n, tf.float64)
 
-    return tf.squeeze(1 - trust_t * (2 / (k * (2 * n - 3 * k - 1))))
+    return tf.squeeze(1 - tf.math.multiply_no_nan(2 / (k * (2 * n - 3 * k - 1)), trust_t))
 
 
 def trustworthiness(X, X_2d, k: int) -> tf.Tensor:

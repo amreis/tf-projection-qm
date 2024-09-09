@@ -24,7 +24,8 @@ def continuity_impl(X, X_2d, k) -> tf.Tensor:
     cont_t = tf.cast(cont, tf.float64)
     k = tf.cast(k, tf.float64)
     n = tf.cast(n, tf.float64)
-    return tf.squeeze(1 - (2 / (k * (2 * n - 3 * k - 1)) * cont_t))
+
+    return tf.squeeze(1 - tf.math.multiply_no_nan(2 / (k * (2 * n - 3 * k - 1)), cont_t))
 
 
 def continuity(X, X_2d, k: int) -> tf.Tensor:
