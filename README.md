@@ -12,7 +12,7 @@ quality metrics that are fast and use idiomatic TensorFlow in their implementati
 
 ## Quality Metrics
 
-A quality metric is a function $\mathcal{M}_\eta$ with two arguments: a dataset $\mathbf{X} \in \mathbb{R}^{n\times D}$ of $D$-dimensional data points, and a corresponding projection $\mathbf{Y} = \mathcal{P}(\mathbb{X}) \in \mathbb{R}^{n\times d}$ where $d$ is usually 2 or 3.
+A quality metric is a function $\mathcal{M}_\eta$ with two arguments: a dataset $\mathbf{X} \in \mathbb{R}^{n\times D}$ of $D$-dimensional data points, and a corresponding projection $\mathbf{Y} = \mathcal{P}(\mathbb{X}) \in \mathbb{R}^{n\times d}$ where $d$ is usually 2 or 3. We represent by $\eta$ the hyperparameters associated with $\mathcal{M}$ -- for instance, the size $k$ of the neighborhood in neighborhood-based metrics such as trustworthiness, continuity, and neighborhood hit.
 
 Projection algorithms can generate $\mathbf{Y}$ in many ways. Of course, not all such projections are equally useful and/or truthful to the data they are based on. While some techniques might be better at representing global aspects of the original dataset $\mathbf{X}$, others might instead favor local neighborhood preservation.
 
