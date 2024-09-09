@@ -47,3 +47,16 @@ def test_two_errors():
     # 1 |     2     |     2      |  Penalty = 0
     # 2 |     1     |     0      |  Penalty = 1
     npt.assert_almost_equal(continuity(X, X_2d, k=1).numpy(), 1 - (1 + 1) / 3.0)
+
+
+def test_k_larger_than_dataset_size():
+    X = np.random.randn(10, 5)
+    X_2d = np.random.randn(10, 2)
+
+    # If k > n-1 (here n == 10), then we're out of neighbors to use for the
+    # computation. The calculation should adapt accordingly (i.e., k shouldn't
+    # have an effect on the result).
+    results = [continuity(X, X_2d, k=_k).numpy() for _k in (10, 20, 1000)]
+
+    npt.assert_array_equal(results[0], results[1])
+    npt.assert_array_equal(results[1], results[2])

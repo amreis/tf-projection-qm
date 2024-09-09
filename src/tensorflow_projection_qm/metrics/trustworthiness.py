@@ -10,6 +10,7 @@ def trustworthiness_impl(X, X_2d, k) -> tf.Tensor:
     D_low = distance.psqdist(X_2d)
 
     n = tf.shape(D_high)[0]
+    k = tf.minimum(k, n - 1)
 
     nn_orig = distance.sort_distances(D_high)
     nn_proj = distance.sort_distances(D_low)
@@ -19,7 +20,9 @@ def trustworthiness_impl(X, X_2d, k) -> tf.Tensor:
     knn_proj = nn_proj[:, 1 : k + 1]
 
     U_i = tf.sparse.to_dense(tf.sets.difference(knn_proj, knn_orig), default_value=-1)
-    pre_trust = tf.where(U_i != -1, tf.gather(ixs_orig, U_i, batch_dims=-1) - k, 0)
+    pre_trust = tf.where(
+        U_i >= 0, tf.gather(ixs_orig, tf.where(U_i >= 0, U_i, 0), batch_dims=-1) - k, 0
+    )
     trust = tf.reduce_sum(pre_trust, -1)
     trust_t = tf.cast(trust, tf.float64)
     k = tf.cast(k, tf.float64)
