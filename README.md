@@ -1,3 +1,4 @@
+[![Python package](https://github.com/amreis/tf-projection-qm/actions/workflows/python-package.yml/badge.svg)](https://github.com/amreis/tf-projection-qm/actions/workflows/python-package.yml)
 # Accelerated Projection Quality Metrics
 
 When evaluating Dimensionality Reduction (AKA Projection) techniques, a number of quality metrics
