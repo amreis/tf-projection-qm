@@ -1,6 +1,9 @@
 # VS Code-specific config
 .vscode/
 
+# UV Python pinned version
+.python-version
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
