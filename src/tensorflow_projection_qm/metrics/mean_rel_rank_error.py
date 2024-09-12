@@ -26,9 +26,7 @@ def mrre_data_impl(X, X_2d, k):
         tf.abs(orig_ranks - tf.expand_dims(tf.range(1, k + 1), 0)) / orig_ranks
     )
 
-    C = tf.cast(n, tf.float64) * tf.reduce_sum(
-        tf.abs(2 * tf.range(1, k + 1) - n - 1) / tf.range(1, k + 1)
-    )
+    C = tf.reduce_sum(tf.abs(2 * tf.range(1, k + 1) - n - 1) / tf.range(1, k + 1))
 
     return (1 / C) * unnormalized
 
@@ -49,11 +47,17 @@ def mrre_proj_impl(X, X_2d, k):
         tf.abs(proj_ranks - tf.expand_dims(tf.range(1, k + 1), 0)) / proj_ranks
     )
 
-    C = tf.cast(n, tf.float64) * tf.reduce_sum(
-        tf.abs(2 * tf.range(1, k + 1) - n - 1) / tf.range(1, k + 1)
-    )
+    C = tf.reduce_sum(tf.abs(2 * tf.range(1, k + 1) - n - 1) / tf.range(1, k + 1))
 
     return (1 / C) * unnormalized
+
+
+def mrre_data_with_local(X, X_2d, k):
+    return mrre_data_impl(X, X_2d, tf.constant(k))
+
+
+def mrre_proj_with_local(X, X_2d, k):
+    return mrre_proj_impl(X, X_2d, tf.constant(k))
 
 
 def mrre_data(X, X_2d, k):
@@ -69,7 +73,7 @@ def mrre_data(X, X_2d, k):
     Returns:
         tf.Tensor: a Tensor containing a single scalar, the metric value.
     """
-    return mrre_data_impl(X, X_2d, tf.constant(k))
+    return tf.reduce_mean(mrre_data_impl(X, X_2d, tf.constant(k)))
 
 
 def mrre_proj(X, X_2d, k):
@@ -85,4 +89,4 @@ def mrre_proj(X, X_2d, k):
     Returns:
         tf.Tensor: a Tensor containing a single scalar, the metric value.
     """
-    return mrre_proj_impl(X, X_2d, tf.constant(k))
+    return tf.reduce_mean(mrre_proj_impl(X, X_2d, tf.constant(k)))

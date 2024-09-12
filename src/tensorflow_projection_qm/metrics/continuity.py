@@ -33,3 +33,8 @@ def continuity_impl(X, X_2d, k) -> tf.Tensor:
 
 def continuity(X, X_2d, k: int) -> tf.Tensor:
     return tf.reduce_mean(continuity_impl(X, X_2d, tf.constant(k)))
+
+
+def continuity_with_local(X, X_2d, k: int) -> tuple[tf.Tensor, tf.Tensor]:
+    per_point = continuity_impl(X, X_2d, tf.constant(k))
+    return tf.reduce_mean(per_point), per_point
