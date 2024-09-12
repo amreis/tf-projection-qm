@@ -47,14 +47,20 @@ def nearest_k(D, k) -> tuple[tf.Tensor, tf.Tensor]:
 
 @tf.function
 def psqdist(X) -> tf.Tensor:
+    X = tf.cast(X, tf.float64)
     row_norms = tf.reshape(tf.reduce_sum(X**2, 1), [-1, 1])
 
-    return row_norms - 2 * tf.matmul(X, X, transpose_b=True) + tf.reshape(row_norms, [1, -1])
+    dists = row_norms - 2 * tf.matmul(X, X, transpose_b=True) + tf.reshape(row_norms, [1, -1])
+    return tf.maximum(dists, 0.0)
 
 
 @tf.function
 def csqdist(X, Y) -> tf.Tensor:
+    X = tf.cast(X, tf.float64)
+    Y = tf.cast(Y, tf.float64)
+
     x_norms = tf.reshape(tf.reduce_sum(X**2, 1), [-1, 1])
     y_norms = tf.reshape(tf.reduce_sum(Y**2, 1), [1, -1])
 
-    return x_norms - 2 * tf.matmul(X, Y, transpose_b=True) + y_norms
+    dists = x_norms - 2 * tf.matmul(X, Y, transpose_b=True) + y_norms
+    return tf.maximum(dists, 0.0)
