@@ -5,8 +5,10 @@ The metrics are implemented as described in Nonlinear Dimensionality Reduction,
 by Lee and Verleysen (2007), Chapter 6.
 """
 
+from typing import Optional
 import tensorflow as tf
 
+from tensorflow_projection_qm.metrics.metric import LocalizableMetric
 from tensorflow_projection_qm.util import distance
 
 
@@ -90,3 +92,43 @@ def mrre_proj(X, X_2d, k):
         tf.Tensor: a Tensor containing a single scalar, the metric value.
     """
     return tf.reduce_mean(mrre_proj_impl(X, X_2d, tf.constant(k)))
+
+
+class MRREData(LocalizableMetric):
+    name = "mrre_data"
+
+    def __init__(self, k: Optional[int] = None) -> None:
+        super().__init__()
+        self.k = k
+
+    @property
+    def config(self):
+        return {"k": self.k}
+
+    def measure(self, X, X_2d):
+        if self._with_local:
+            return mrre_data_with_local(X, X_2d, self.k)
+        return mrre_data(X, X_2d, self.k)
+
+    def measure_from_dict(self, args: dict):
+        return self.measure(args["X"], args["X_2d"])
+
+
+class MRREProj(LocalizableMetric):
+    name = "mrre_proj"
+
+    def __init__(self, k: Optional[int] = None) -> None:
+        super().__init__()
+        self.k = k
+
+    @property
+    def config(self):
+        return {"k": self.k}
+
+    def measure(self, X, X_2d):
+        if self._with_local:
+            return mrre_proj_with_local(X, X_2d, self.k)
+        return mrre_proj(X, X_2d, self.k)
+
+    def measure_from_dict(self, args: dict):
+        return self.measure(args["X"], args["X_2d"])

@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+from tensorflow_projection_qm.metrics.metric import Metric
 from tensorflow_projection_qm.util import distance
 
 
@@ -64,3 +65,37 @@ def scale_normalized_stress(X, X_2d):
     D_low = tf.sqrt(distance.psqdist(X_2d))
 
     return scale_normalized_stress_from_distances(D_high, D_low)
+
+
+class NormalizedStress(Metric):
+    name = "normalized_stress"
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    @property
+    def config(self):
+        return {}
+
+    def measure(self, X, X_2d):
+        return normalized_stress(X, X_2d)
+
+    def measure_from_dict(self, args: dict):
+        return self.measure(args["X"], args["X_2d"])
+
+
+class ScaleNormalizedStress(Metric):
+    name = "scale_normalized_stress"
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    @property
+    def config(self):
+        return {}
+
+    def measure(self, X, X_2d):
+        return scale_normalized_stress(X, X_2d)
+
+    def measure_from_dict(self, args: dict):
+        return self.measure(args["X"], args["X_2d"])

@@ -1,6 +1,8 @@
 import numpy as np
 import tensorflow as tf
 
+from tensorflow_projection_qm.metrics.metric import Metric
+
 
 @tf.function
 def distance_consistency_impl(X_2d, y, n_classes):
@@ -11,7 +13,7 @@ def distance_consistency_impl(X_2d, y, n_classes):
     uniq, _, sizes = tf.unique_with_counts(y_sorted)
     per_class = tf.split(X_2d, sizes, num=n_classes)
 
-    centroids = tf.convert_to_tensor(
+    centroids = tf.stack(
         [tf.reduce_mean(single_class_data, axis=0) for single_class_data in per_class]
     )
 
@@ -27,3 +29,20 @@ def distance_consistency(X_2d, y):
     n_classes = len(np.unique(y))
 
     return distance_consistency_impl(X_2d, y, n_classes)
+
+
+class DistanceConsistency(Metric):
+    name = "distance_consistency"
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    @property
+    def config(self):
+        return {}
+
+    def measure(self, X_2d, y):
+        return distance_consistency(X_2d, y)
+
+    def measure_from_dict(self, args: dict):
+        return self.measure(args["X_2d"], args["y"])

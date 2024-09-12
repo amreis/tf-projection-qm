@@ -1,5 +1,7 @@
+from typing import Optional
 import tensorflow as tf
 
+from tensorflow_projection_qm.metrics.metric import LocalizableMetric
 from tensorflow_projection_qm.util import distance
 
 
@@ -38,3 +40,23 @@ def continuity(X, X_2d, k: int) -> tf.Tensor:
 def continuity_with_local(X, X_2d, k: int) -> tuple[tf.Tensor, tf.Tensor]:
     per_point = continuity_impl(X, X_2d, tf.constant(k))
     return tf.reduce_mean(per_point), per_point
+
+
+class Continuity(LocalizableMetric):
+    name = "continuity"
+
+    def __init__(self, k: Optional[int] = None) -> None:
+        super().__init__()
+        self.k = k
+
+    @property
+    def config(self):
+        return {"k": self.k}
+
+    def measure(self, X, X_2d):
+        if self._with_local:
+            return continuity_with_local(X, X_2d, self.k)
+        return continuity(X, X_2d, self.k)
+
+    def measure_from_dict(self, args: dict):
+        return self.measure(args["X"], args["X_2d"])
