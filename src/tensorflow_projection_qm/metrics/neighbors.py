@@ -87,6 +87,8 @@ def true_neighbors_with_local(X, X_2d, k):
 
 
 class FalseNeighbors(LocalizableMetric):
+    name = "false_neighbors"
+
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
         self.k = k
@@ -105,6 +107,8 @@ class FalseNeighbors(LocalizableMetric):
 
 
 class MissingNeighbors(LocalizableMetric):
+    name = "missing_neighbors"
+
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
         self.k = k
@@ -123,6 +127,8 @@ class MissingNeighbors(LocalizableMetric):
 
 
 class TrueNeighbors(LocalizableMetric):
+    name = "true_neighbors"
+
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
         self.k = k

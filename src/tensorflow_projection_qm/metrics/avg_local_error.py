@@ -28,6 +28,8 @@ def average_local_error_with_local(X, X_2d):
 
 
 class AverageLocalError(LocalizableMetric):
+    name = "average_local_error"
+
     def __init__(self) -> None:
         super().__init__()
 
