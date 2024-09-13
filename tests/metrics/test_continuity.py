@@ -1,4 +1,4 @@
-from tensorflow_projection_qm.metrics import continuity
+from tensorflow_projection_qm.metrics.continuity import continuity
 
 import numpy as np
 import numpy.testing as npt
@@ -32,7 +32,7 @@ def test_one_error():
     # 0 |     1     |     2      |  Penalty = 1
     # 1 |     2     |     2      |  Penalty = 0
     # 2 |     1     |     1      |  Penalty = 0
-    npt.assert_almost_equal(continuity(X, X_2d, k=1).numpy(), 1 - 1.0 / 3.0)
+    npt.assert_allclose(continuity(X, X_2d, k=1).numpy(), 1 - 1.0 / 3.0)
 
 
 def test_two_errors():
@@ -46,7 +46,7 @@ def test_two_errors():
     # 0 |     1     |     2      |  Penalty = 1
     # 1 |     2     |     2      |  Penalty = 0
     # 2 |     1     |     0      |  Penalty = 1
-    npt.assert_almost_equal(continuity(X, X_2d, k=1).numpy(), 1 - (1 + 1) / 3.0)
+    npt.assert_allclose(continuity(X, X_2d, k=1).numpy(), 1 - (1 + 1) / 3.0)
 
 
 def test_k_larger_than_dataset_size():
@@ -58,5 +58,5 @@ def test_k_larger_than_dataset_size():
     # have an effect on the result).
     results = [continuity(X, X_2d, k=_k).numpy() for _k in (10, 20, 1000)]
 
-    npt.assert_array_equal(results[0], results[1])
-    npt.assert_array_equal(results[1], results[2])
+    npt.assert_allclose(results[0], results[1])
+    npt.assert_allclose(results[1], results[2])
