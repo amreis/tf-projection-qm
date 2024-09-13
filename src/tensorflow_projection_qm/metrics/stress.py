@@ -42,7 +42,7 @@ def scaled_stress(X, X_2d, alpha=1.0):
 
 @tf.function
 def scale_normalized_stress_from_distances(D_high, D_low):
-    opt_alpha = tf.reduce_sum(D_high * D_low) / tf.reduce_sum(D_high**2)
+    opt_alpha = tf.reduce_sum(D_high * D_low) / tf.reduce_sum(D_low**2)
 
     return normalized_stress_from_distances(D_high, opt_alpha * D_low)
 
