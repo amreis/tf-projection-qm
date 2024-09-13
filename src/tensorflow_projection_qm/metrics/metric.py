@@ -1,5 +1,4 @@
-from abc import abstractmethod, ABC
-
+from abc import ABC, abstractmethod
 from typing import Iterable, TypeVar
 
 # typing.Self only available in Python>=3.11.

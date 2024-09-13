@@ -1,7 +1,8 @@
 from typing import Optional
+
 import tensorflow as tf
 
-from tensorflow_projection_qm.metrics.metric import LocalizableMetric, Metric
+from tensorflow_projection_qm.metrics.metric import LocalizableMetric
 from tensorflow_projection_qm.util import distance
 
 

@@ -6,6 +6,7 @@ by Lee and Verleysen (2007), Chapter 6.
 """
 
 from typing import Optional
+
 import tensorflow as tf
 
 from tensorflow_projection_qm.metrics.metric import LocalizableMetric

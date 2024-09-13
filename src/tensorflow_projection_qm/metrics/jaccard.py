@@ -1,4 +1,5 @@
 from typing import Optional, Union
+
 import tensorflow as tf
 
 from tensorflow_projection_qm.util import distance
@@ -74,11 +75,3 @@ class Jaccard(LocalizableMetric):
 
     def measure_from_dict(self, data_dict: dict[str, object]):
         return self.measure(data_dict["X"], data_dict["X_2d"])
-
-
-def compute_many_metrics(metrics_list: list, data_dict: dict[str]):
-    metrics_list = [
-        Jaccard(21).with_local(),
-        Jaccard(7).with_local(),
-        Jaccard(1).with_local(),
-    ]
