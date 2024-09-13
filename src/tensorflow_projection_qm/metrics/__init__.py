@@ -1,4 +1,5 @@
 from . import (
+    avg_local_error,
     continuity,
     distance_consistency,
     jaccard,
@@ -11,6 +12,7 @@ from . import (
 )
 
 _ALL_LOCALIZABLE_METRICS: tuple[metric.LocalizableMetric, ...] = (
+    avg_local_error.AverageLocalError(),
     continuity.Continuity(),
     jaccard.Jaccard(),
     mean_rel_rank_error.MRREData(),
