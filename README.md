@@ -42,10 +42,17 @@ from sklearn.manifold import TSNE
 X_proj = TSNE(n_components=2).fit_transform(X).astype(X.dtype)
 
 # Evaluate the projection:
-C = continuity(X, X_proj, k=21).numpy()
-T = trustworthiness(X, X_proj, k=21).numpy()
+C = continuity.continuity(X, X_proj, k=21).numpy()
+T = trustworthiness.trustworthiness(X, X_proj, k=21).numpy()
 print(f"Continuity: {C}")
 print(f"Trustworthiness: {T}")
+
+# Compute per-point value of a metric (not all metrics support this)
+C_i = continuity.continuity_with_local(X, X_proj, k=21)[1].numpy()
+T_i = trustworthiness.trustworthiness_with_local(X, X_proj, k=21)[1].numpy()
+
+print(f"Per-point Continuity: {C_i}")
+print(f"Per-point Trustworthiness: {T_i})
 ```
 
 ## Why this package?
