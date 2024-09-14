@@ -13,8 +13,8 @@ def false_neighbors_impl(X, X_2d, k):
     D_high = distance.psqdist(X)
     D_low = distance.psqdist(X_2d)
 
-    knn_orig = distance.nearest_k(D_high, k)
-    knn_proj = distance.nearest_k(D_low, k)
+    _, knn_orig = distance.nearest_k(D_high, k)
+    _, knn_proj = distance.nearest_k(D_low, k)
 
     false_neighbors = tf.sparse.reduce_sum(
         tf.sparse.map_values(tf.ones_like, tf.sets.difference(knn_proj, knn_orig)), axis=-1
@@ -31,8 +31,8 @@ def missing_neighbors_impl(X, X_2d, k):
     D_high = distance.psqdist(X)
     D_low = distance.psqdist(X_2d)
 
-    knn_orig = distance.nearest_k(D_high, k)
-    knn_proj = distance.nearest_k(D_low, k)
+    _, knn_orig = distance.nearest_k(D_high, k)
+    _, knn_proj = distance.nearest_k(D_low, k)
 
     missing_neighbors = tf.sparse.reduce_sum(
         tf.sparse.map_values(tf.ones_like, tf.sets.difference(knn_orig, knn_proj)), axis=-1
@@ -49,8 +49,8 @@ def true_neighbors_impl(X, X_2d, k):
     D_high = distance.psqdist(X)
     D_low = distance.psqdist(X_2d)
 
-    knn_orig = distance.nearest_k(D_high, k)
-    knn_proj = distance.nearest_k(D_low, k)
+    _, knn_orig = distance.nearest_k(D_high, k)
+    _, knn_proj = distance.nearest_k(D_low, k)
 
     true_neighbors = tf.sparse.reduce_sum(
         tf.sparse.map_values(tf.ones_like, tf.sets.intersection(knn_orig, knn_proj)), axis=-1
