@@ -22,6 +22,7 @@ _ALL_LOCALIZABLE_METRICS: tuple[metric.LocalizableMetric, ...] = (
     neighbors.FalseNeighbors(),
     neighbors.MissingNeighbors(),
     neighbors.TrueNeighbors(),
+    trustworthiness.ClassAwareTrustworthiness(),
     trustworthiness.Trustworthiness(),
 )
 _ALL_METRICS: tuple[metric.Metric, ...] = _ALL_LOCALIZABLE_METRICS + (
