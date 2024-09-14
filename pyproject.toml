@@ -38,8 +38,8 @@ Homepage = "https://github.com/amreis/tf-projection-qm"
 resolution = "lowest-direct"
 dev-dependencies = [
     "matplotlib>=3.9",
-    "pre-commit>=3.8",
-    "pytest>=8.3",
+    "pytest-cov>=0.6",
+    "pytest==7.4.*",
     "scikit-learn>=1.5",
     "tensorboard-plugin-profile==2.17.0",
 ]
@@ -48,6 +48,7 @@ dev-dependencies = [
 line-length = 100
 
 [tool.pytest.ini_options]
+# Consider adding --cov
 addopts = ["--doctest-modules"]
 
 [build-system]
