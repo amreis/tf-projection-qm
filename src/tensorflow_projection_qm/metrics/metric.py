@@ -44,7 +44,7 @@ class LocalizableMetric(Metric):
 class MetricSet:
     def __init__(self, metrics: Iterable[Metric], defaults: dict = {}) -> None:
         self.metrics = list(metrics)
-        self.defaults: dict = defaults
+        self.defaults: dict = {} | defaults
 
     def set_default(self, **kwargs):
         self.defaults |= kwargs

@@ -7,6 +7,8 @@ from . import (
     metric,
     neighborhood_hit,
     neighbors,
+    pearson_correlation,
+    shepard_goodness,
     stress,
     trustworthiness,
 )
@@ -27,6 +29,8 @@ _ALL_LOCALIZABLE_METRICS: tuple[metric.LocalizableMetric, ...] = (
 )
 _ALL_METRICS: tuple[metric.Metric, ...] = _ALL_LOCALIZABLE_METRICS + (
     distance_consistency.DistanceConsistency(),
+    pearson_correlation.PearsonCorrelation(),
+    shepard_goodness.ShepardGoodness(),
     stress.NormalizedStress(),
     stress.ScaleNormalizedStress(),
 )
