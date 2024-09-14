@@ -64,3 +64,14 @@ def csqdist(X, Y) -> tf.Tensor:
 
     dists = x_norms - 2 * tf.matmul(X, Y, transpose_b=True) + y_norms
     return tf.maximum(dists, 0.0)
+
+
+@tf.function
+def flat_psqdist(X) -> tf.Tensor:
+    D = psqdist(X)
+
+    mask = tf.ones_like(D)
+    mask = tf.linalg.band_part(mask, 0, -1) - tf.linalg.band_part(mask, 0, 0)
+    mask = tf.cast(mask, bool)
+
+    return tf.boolean_mask(D, mask)
