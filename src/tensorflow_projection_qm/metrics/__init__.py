@@ -13,6 +13,7 @@ from . import (
 
 _ALL_LOCALIZABLE_METRICS: tuple[metric.LocalizableMetric, ...] = (
     avg_local_error.AverageLocalError(),
+    continuity.ClassAwareContinuity(),
     continuity.Continuity(),
     jaccard.Jaccard(),
     mean_rel_rank_error.MRREData(),
@@ -30,9 +31,9 @@ _ALL_METRICS: tuple[metric.Metric, ...] = _ALL_LOCALIZABLE_METRICS + (
 )
 
 
-def run_all_metrics(X, X_2d, y, k, *, as_numpy=False):
+def run_all_metrics(X, X_2d, y, k, n_classes=None, *, as_numpy=False):
     ms = metric.MetricSet(list(_ALL_METRICS))
-    ms.set_default(k=k)
+    ms.set_default(k=k, n_classes=n_classes)
     measures = ms.measure_from_dict({"X": X, "X_2d": X_2d, "y": y})
 
     if as_numpy:
