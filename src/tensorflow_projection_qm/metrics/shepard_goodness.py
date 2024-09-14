@@ -20,7 +20,7 @@ def shepard_goodness_impl(X, X_2d):
         return flat_d_high, flat_d_low
 
     flat_d_high, flat_d_low = _inner(X, X_2d)
-    return scipy.stats.spearmanr(flat_d_high.numpy(), flat_d_low.numpy())[0]
+    return tf.convert_to_tensor(scipy.stats.spearmanr(flat_d_high.numpy(), flat_d_low.numpy())[0])
 
 
 def shepard_goodness(X, X_2d):

@@ -1,3 +1,4 @@
+import numpy  np
 import scipy.stats
 import tensorflow as tf
 
@@ -20,7 +21,7 @@ def pearson_correlation_impl(X, X_2d):
         return flat_d_high, flat_d_low
 
     flat_d_high, flat_d_low = _inner(X, X_2d)
-    return scipy.stats.pearsonr(flat_d_high, flat_d_low)[0]
+    return tf.convert_to_tensor(scipy.stats.pearsonr(flat_d_high, flat_d_low)[0])
 
 
 def pearson_correlation(X, X_2d):
