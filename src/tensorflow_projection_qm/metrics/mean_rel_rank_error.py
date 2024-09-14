@@ -26,7 +26,7 @@ def mrre_data_impl(X, X_2d, k):
 
     orig_ranks = tf.gather(ixs_orig, knn_proj, batch_dims=-1)
     unnormalized = tf.reduce_sum(
-        tf.abs(orig_ranks - tf.expand_dims(tf.range(1, k + 1), 0)) / orig_ranks
+        tf.abs(orig_ranks - tf.expand_dims(tf.range(1, k + 1), 0)) / orig_ranks, axis=-1
     )
 
     C = tf.reduce_sum(tf.abs(2 * tf.range(1, k + 1) - n - 1) / tf.range(1, k + 1))
@@ -47,7 +47,7 @@ def mrre_proj_impl(X, X_2d, k):
 
     proj_ranks = tf.gather(ixs_proj, knn_orig, batch_dims=-1)
     unnormalized = tf.reduce_sum(
-        tf.abs(proj_ranks - tf.expand_dims(tf.range(1, k + 1), 0)) / proj_ranks
+        tf.abs(proj_ranks - tf.expand_dims(tf.range(1, k + 1), 0)) / proj_ranks, axis=-1
     )
 
     C = tf.reduce_sum(tf.abs(2 * tf.range(1, k + 1) - n - 1) / tf.range(1, k + 1))
