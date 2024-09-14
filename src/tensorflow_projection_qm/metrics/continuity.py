@@ -15,6 +15,11 @@ def continuity_impl(X, X_2d, k) -> tf.Tensor:
     n = tf.shape(D_high)[0]
     k = tf.minimum(k, n - 1)
 
+    if 2 * k < n:
+        norm_factor = k * (2 * n - 3 * k - 1) / 2
+    else:
+        norm_factor = (n - k) * (n - k - 1) / 2
+
     nn_orig = distance.sort_distances(D_high)
     nn_proj = distance.sort_distances(D_low)
     ixs_proj = tf.argsort(nn_proj)
@@ -31,7 +36,7 @@ def continuity_impl(X, X_2d, k) -> tf.Tensor:
     k = tf.cast(k, tf.float64)
     n = tf.cast(n, tf.float64)
 
-    return tf.squeeze(1 - tf.math.multiply_no_nan(2 / (k * (2 * n - 3 * k - 1)), cont_t))
+    return tf.squeeze(1 - tf.math.multiply_no_nan(1 / norm_factor, cont_t))
 
 
 @tf.function
