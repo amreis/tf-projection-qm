@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 import tensorflow as tf
 
@@ -25,24 +27,23 @@ def distance_consistency_impl(X_2d, y, n_classes):
     return tf.reduce_mean(tf.cast(closest_centroid == y_sorted, tf.float64))
 
 
-def distance_consistency(X_2d, y):
-    n_classes = len(np.unique(y))
-
+def distance_consistency(X_2d, y, n_classes):
     return distance_consistency_impl(X_2d, y, n_classes)
 
 
 class DistanceConsistency(Metric):
     name = "distance_consistency"
 
-    def __init__(self) -> None:
+    def __init__(self, n_classes: Optional[int] = None) -> None:
         super().__init__()
+        self.n_classes = n_classes
 
     @property
     def config(self):
-        return {}
+        return {"n_classes": self.n_classes}
 
     def measure(self, X_2d, y):
-        return distance_consistency(X_2d, y)
+        return distance_consistency(X_2d, y, self.n_classes)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X_2d"], args["y"])
