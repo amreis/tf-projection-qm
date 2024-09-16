@@ -20,11 +20,10 @@ def trustworthiness_impl(X, X_2d, k) -> tf.Tensor:
         norm_factor = (n - k) * (n - k - 1) / 2
 
     nn_orig = distance.sort_distances(D_high)
-    nn_proj = distance.sort_distances(D_low)
     ixs_orig = tf.argsort(nn_orig)
 
     knn_orig = nn_orig[:, 1 : k + 1]
-    knn_proj = nn_proj[:, 1 : k + 1]
+    knn_proj = distance.nearest_k(D_low, k=k + 1)[1][:, 1:]
 
     U_i = tf.sparse.to_dense(tf.sets.difference(knn_proj, knn_orig), default_value=-1)
     pre_trust = tf.where(
@@ -61,11 +60,10 @@ def class_aware_trustworthiness_impl(X, X_2d, y, k, n_classes):
         norm_factor = (n - k) * (n - k - 1) / 2
 
     nn_orig = distance.sort_distances(D_high)
-    nn_proj = distance.sort_distances(D_low)
     ixs_orig = tf.argsort(nn_orig)
 
     knn_orig = nn_orig[:, 1 : k + 1]
-    knn_proj = nn_proj[:, 1 : k + 1]
+    knn_proj = distance.nearest_k(D_low, k=k + 1)[1][..., 1:]
 
     false = tf.sparse.to_dense(tf.sets.difference(knn_proj, knn_orig), default_value=-1)
     classes = tf.where(false >= 0, tf.gather(y, tf.where(false >= 0, false, 0)), -1)

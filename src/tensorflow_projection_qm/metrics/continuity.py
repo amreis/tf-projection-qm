@@ -20,11 +20,10 @@ def continuity_impl(X, X_2d, k) -> tf.Tensor:
     else:
         norm_factor = (n - k) * (n - k - 1) / 2
 
-    nn_orig = distance.sort_distances(D_high)
+    knn_orig = distance.nearest_k(D_high, k=k + 1)[1][:, 1:]
     nn_proj = distance.sort_distances(D_low)
     ixs_proj = tf.argsort(nn_proj)
 
-    knn_orig = nn_orig[:, 1 : k + 1]
     knn_proj = nn_proj[:, 1 : k + 1]
 
     V_i = tf.sparse.to_dense(tf.sets.difference(knn_orig, knn_proj), default_value=-1)
@@ -52,11 +51,10 @@ def class_aware_continuity_impl(X, X_2d, y, k, n_classes):
     else:
         norm_factor = (n - k) * (n - k - 1) / 2
 
-    nn_orig = distance.sort_distances(D_high)
     nn_proj = distance.sort_distances(D_low)
     ixs_proj = tf.argsort(nn_proj)
 
-    knn_orig = nn_orig[:, 1 : k + 1]
+    knn_orig = distance.nearest_k(D_high, k=k + 1)[1][:, 1:]
     knn_proj = nn_proj[:, 1 : k + 1]
 
     missing = tf.sparse.to_dense(tf.sets.difference(knn_orig, knn_proj), default_value=-1)
