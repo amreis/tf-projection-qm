@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional
 
 import tensorflow as tf
 
@@ -29,7 +29,7 @@ def jaccard_impl(X, X_2d, k) -> tf.Tensor:
     # intersection_sizes = tf.sparse.reduce_count ?
 
 
-def jaccard(X, X_2d, k, *, with_local=False) -> Union[tf.Tensor, tuple[tf.Tensor, tf.Tensor]]:
+def jaccard(X, X_2d, k):
     """Calculate the Jaccard quality metric for a projection
 
     Args:
@@ -40,15 +40,9 @@ def jaccard(X, X_2d, k, *, with_local=False) -> Union[tf.Tensor, tuple[tf.Tensor
             as the value for each data point. Defaults to False.
 
     Returns:
-        - tf.Tensor: the scalar value of the Jaccard metric for the whole projection.
-        - tf.Tensor, optional: the per-point value of the Jaccard metric, when `with_local`=True
+        tf.Tensor: the scalar value of the Jaccard metric for the whole projection.
     """
-
-    per_point = jaccard_impl(X, X_2d, tf.constant(k))
-    agg = tf.reduce_mean(per_point)
-    if with_local:
-        return agg, per_point
-    return agg
+    return tf.reduce_mean(jaccard_impl(X, X_2d, tf.constant(k)))
 
 
 def jaccard_with_local(X, X_2d, k) -> tuple[tf.Tensor, tf.Tensor]:
@@ -67,8 +61,7 @@ class Jaccard(LocalizableMetric):
     def config(self):
         return {"k": self.k}
 
-    def measure(self, X, X_2d, *, k: Optional[int] = None):
-        k = self.k if self.k is not None else k
+    def measure(self, X, X_2d):
         if self._with_local:
             return jaccard_with_local(X, X_2d, k)
         return jaccard(X, X_2d, k)
