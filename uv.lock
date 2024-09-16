@@ -365,6 +365,18 @@ wheels = [
 ]
 
 [[package]]
+name = "gviz-api"
+version = "1.10.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/19/9f/04af080c6cb83b934ec9ce65d047e43ae6fddfed847cac0093fe97296a98/gviz_api-1.10.0.tar.gz", hash = "sha256:846692dd8cc73224fc31b18e41589bd934e1cc05090c6576af4b4b26c2e71b90", size = 13787 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/67/42/e6ae4f7903f17be07c47b7af1f6d83ec4fe931f373f900f542d737d9940e/gviz_api-1.10.0-py2.py3-none-any.whl", hash = "sha256:a05055fed8c279f34f4b496eace7648c7fe9c1b06851e8a36e748541f1adbb05", size = 13618 },
+]
+
+[[package]]
 name = "h5py"
 version = "3.11.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1645,6 +1657,22 @@ wheels = [
 ]
 
 [[package]]
+name = "tensorboard-plugin-profile"
+version = "2.17.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "gviz-api" },
+    { name = "protobuf" },
+    { name = "setuptools" },
+    { name = "six" },
+    { name = "werkzeug" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/1e/34/a2a8adcb58f5ecce3eb9fb625122455fac57d094c1483fefd05a60d23057/tensorboard_plugin_profile-2.17.0.tar.gz", hash = "sha256:a7bb4eae9f41ca3606bb2fb43ffe04ab5dbb872fc5fc26a76086ebc608ef58ed", size = 5594654 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4e/87/acc98529ad387b67d0af13777d3cc8349867a2923a07d804d7b190ca60b7/tensorboard_plugin_profile-2.17.0-py3-none-any.whl", hash = "sha256:47f04031c8746869755132c6570fd73b8c4101a1ef7343dd8787b53c9498a2f8", size = 5673816 },
+]
+
+[[package]]
 name = "tensorflow"
 version = "2.15.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1824,6 +1852,7 @@ dev = [
     { name = "matplotlib" },
     { name = "pytest" },
     { name = "scikit-learn" },
+    { name = "tensorboard-plugin-profile" },
 ]
 
 [package.metadata]
@@ -1839,6 +1868,7 @@ dev = [
     { name = "matplotlib", specifier = ">=3.9" },
     { name = "pytest", specifier = ">=8.3" },
     { name = "scikit-learn", specifier = ">=1.5" },
+    { name = "tensorboard-plugin-profile", specifier = "==2.17.0" },
 ]
 
 [[package]]

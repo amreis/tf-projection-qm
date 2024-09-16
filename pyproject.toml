@@ -36,7 +36,12 @@ Homepage = "https://github.com/amreis/tf-projection-qm"
 
 [tool.uv]
 resolution = "lowest-direct"
-dev-dependencies = ["matplotlib>=3.9", "pytest>=8.3", "scikit-learn>=1.5"]
+dev-dependencies = [
+    "matplotlib>=3.9",
+    "pytest>=8.3",
+    "scikit-learn>=1.5",
+    "tensorboard-plugin-profile==2.17.0",
+]
 
 [tool.pytest.ini_options]
 addopts = ["--doctest-modules"]
