@@ -1,6 +1,6 @@
 [project]
 name = "tensorflow-projection-qm"
-version = "0.1.0"
+version = "0.1.1"
 authors = [{ name = "Alister Machado", email = "alister.reis@gmail.com" }]
 description = "A package with fast, TensorFlow-based implementations of projection (i.e., dimensionality reduction) quality metrics."
 readme = "README.md"
