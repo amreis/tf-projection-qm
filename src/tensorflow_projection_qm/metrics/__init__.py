@@ -34,12 +34,19 @@ _ALL_METRICS: tuple[metric.Metric, ...] = _ALL_LOCALIZABLE_METRICS + (
     stress.NormalizedStress(),
     stress.ScaleNormalizedStress(),
 )
+_ALL_METRICS_METRICSET = metric.MetricSet(list(_ALL_METRICS))
+
+
+def get_all_metrics_runner(defaults: dict) -> metric.MetricSet:
+    ms = metric.MetricSet(list(_ALL_METRICS))
+    ms.set_default(**defaults)
+
+    return ms
 
 
 def run_all_metrics(X, X_2d, y, k, n_classes=None, *, as_numpy=False):
-    ms = metric.MetricSet(list(_ALL_METRICS))
-    ms.set_default(k=k, n_classes=n_classes)
-    measures = ms.measure_from_dict({"X": X, "X_2d": X_2d, "y": y})
+    _ALL_METRICS_METRICSET.set_default(k=k, n_classes=n_classes)
+    measures = _ALL_METRICS_METRICSET.measure_from_dict({"X": X, "X_2d": X_2d, "y": y})
 
     if as_numpy:
         measures = {k: v.numpy() for k, v in measures.items()}
