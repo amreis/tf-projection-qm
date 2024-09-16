@@ -1,4 +1,4 @@
-from tensorflow_projection_qm.metrics.continuity import continuity
+from tensorflow_projection_qm.metrics.trustworthiness import trustworthiness
 
 import numpy as np
 import numpy.testing as npt
@@ -8,7 +8,7 @@ def test_single_data_point():
     X = np.array([[1.0, 2.0, 3.0]])  # a single data point in 3-D
     X_2d = np.array([[0.0, -1.0]])  # a single projected data point
 
-    npt.assert_equal(continuity(X, X_2d, k=1).numpy(), 1.0)
+    npt.assert_equal(trustworthiness(X, X_2d, k=1).numpy(), 1.0)
 
 
 def test_two_data_points():
@@ -18,7 +18,7 @@ def test_two_data_points():
     # In this case, one data point is always the other's nearest
     # neighbor, irrespective of the distance. Continuity should
     # be perfect (== 1.0)
-    npt.assert_equal(continuity(X, X_2d, k=1).numpy(), 1.0)
+    npt.assert_equal(trustworthiness(X, X_2d, k=1).numpy(), 1.0)
 
 
 def test_one_error():
@@ -32,7 +32,7 @@ def test_one_error():
     # 0 |     1     |     2      |  Penalty = 1
     # 1 |     2     |     2      |  Penalty = 0
     # 2 |     1     |     1      |  Penalty = 0
-    npt.assert_allclose(continuity(X, X_2d, k=1).numpy(), 1 - 1.0 / 3.0)
+    npt.assert_allclose(trustworthiness(X, X_2d, k=1).numpy(), 1 - 1.0 / 3.0)
 
 
 def test_two_errors():
@@ -46,7 +46,7 @@ def test_two_errors():
     # 0 |     1     |     2      |  Penalty = 1
     # 1 |     2     |     2      |  Penalty = 0
     # 2 |     1     |     0      |  Penalty = 1
-    npt.assert_allclose(continuity(X, X_2d, k=1).numpy(), 1 - (1 + 1) / 3.0)
+    npt.assert_allclose(trustworthiness(X, X_2d, k=1).numpy(), 1 - (1 + 1) / 3.0)
 
 
 def test_k_larger_than_dataset_size():
@@ -56,7 +56,7 @@ def test_k_larger_than_dataset_size():
     # If k > n-1 (here n == 10), then we're out of neighbors to use for the
     # computation. The calculation should adapt accordingly (i.e., k shouldn't
     # have an effect on the result).
-    results = [continuity(X, X_2d, k=_k).numpy() for _k in (10, 20, 1000)]
+    results = [trustworthiness(X, X_2d, k=_k).numpy() for _k in (10, 20, 1000)]
 
     npt.assert_allclose(results[0], results[1])
     npt.assert_allclose(results[1], results[2])
@@ -68,32 +68,32 @@ def test_no_errors_possible():
     # data in a line, with one swap: 0 - 2 -- 1
     X_2d = np.c_[np.zeros(3), np.array([0.0, 2.0, 0.9])]
 
-    # Since K = n-1, there are no possible errors, continuity is perfect.
+    # Since K = n-1, there are no possible errors, trustworthiness is perfect.
 
-    # Nearest neighbors:
+    # Nearest neighbor:s
     #    Data Space | Proj Space |
     # 0 |    1, 2   |     2, 1   |  Penalty = 0
     # 1 |    2, 0   |     2, 0   |  Penalty = 0
     # 2 |    1, 0   |     0, 1   |  Penalty = 0
-    npt.assert_allclose(continuity(X, X_2d, k=2).numpy(), 1)
+    npt.assert_allclose(trustworthiness(X, X_2d, k=2).numpy(), 1)
 
 
-def test_two_missing_neighbors():
+def test_two_false_neighbors():
     # data in a line: 0 -- 1 - 2 -- 3
     X = np.c_[np.zeros(4), np.array([0.0, 1.5, 2.0, 3.0]), np.zeros(4)]
     # data in a line, with one swap: 0 - 2 -- 1 - 3
     X_2d = np.c_[np.zeros(4), np.array([0.0, 2.0, 0.9, 2.1])]
 
-    # Nearest neighbors:
+    # Nearest neighbor:s
     #    Data Space | Proj Space |
     # 0 |    1, 2   |     2, 1   |  Penalty = 0
-    # 1 |    2, 0   |     3, 2   |  Penalty = 3 - 2 = 1 (0 is missing neighbor)
-    # 2 |    1, 3   |     0, 1   |  Penalty = 3 - 2 = 1 (3 is missing neighbor)
+    # 1 |    2, 0   |     3, 2   |  Penalty = 3 - 2 = 1
+    # 2 |    1, 3   |     0, 1   |  Penalty = 3 - 2 = 1
     # 3 |    2, 1   |     1, 2   |  Penalty = 0
-    npt.assert_allclose(continuity(X, X_2d, k=2).numpy(), 1 - 2.0 / 4.0)
+    npt.assert_allclose(trustworthiness(X, X_2d, k=2).numpy(), 1 - 2.0 / 4.0)
 
 
-def test_three_missing_neighbors_diff_ranks():
+def test_three_false_neighbors_diff_ranks():
     # data: 0 -- 1 - 2 -- 3
     #            |
     #            4
@@ -103,12 +103,12 @@ def test_three_missing_neighbors_diff_ranks():
 
     # Nearest neighbors:
     #    Data Space | Proj Space | Diff |
-    # 0 |    1, 4   |     1, 2   |  [4] | Penalty = 4 - 2 = 2 (4 is missing)
-    # 1 |    2, 4   |     2, 0   |  [4] | Penalty = 4 - 2 = 2 (4 is missing)
+    # 0 |    1, 4   |     1, 2   |  [2] | Penalty = 3 - 2 = 1 (2 is false)
+    # 1 |    2, 4   |     2, 0   |  [0] | Penalty = 3 - 2 = 1 (0 is false)
     # 2 |    1, 3   |     1, 3   |  []  | Penalty = 0
     # 3 |    2, 1   |     2, 1   |  []  | Penalty = 0
-    # 4 |    1, 2   |     3, 2   |  [1] | Penalty = 3 - 2 = 1 (1 is missing)
+    # 4 |    1, 2   |     3, 2   |  [3] | Penalty = 4 - 2 = 1 (1 is missing)
     npt.assert_allclose(
-        continuity(X, X_2d, k=2).numpy(),
-        np.mean(1 - np.array([2.0, 2.0, 0.0, 0.0, 1.0]) / (2 * 5 - 3 * 2 - 1)),
+        trustworthiness(X, X_2d, k=2).numpy(),
+        np.mean(1 - np.array([1.0, 1.0, 0.0, 0.0, 2.0]) / (2 * 5 - 3 * 2 - 1)),
     )
