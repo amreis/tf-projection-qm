@@ -9,12 +9,16 @@ from tensorflow_projection_qm.util import distance
 @tf.function
 def false_neighbors_impl(X, X_2d, k):
     k = tf.cast(k, tf.int32)
+    n = tf.shape(X)[0]
+    k = tf.minimum(k, n - 1)
 
     D_high = distance.psqdist(X)
     D_low = distance.psqdist(X_2d)
 
-    _, knn_orig = distance.nearest_k(D_high, k)
-    _, knn_proj = distance.nearest_k(D_low, k)
+    _, knn_orig = distance.nearest_k(D_high, k=k + 1)
+    _, knn_proj = distance.nearest_k(D_low, k=k + 1)
+    knn_orig = knn_orig[:, 1:]
+    knn_proj = knn_proj[:, 1:]
 
     false_neighbors = tf.sparse.reduce_sum(
         tf.sparse.map_values(tf.ones_like, tf.sets.difference(knn_proj, knn_orig)), axis=-1
@@ -27,12 +31,16 @@ def false_neighbors_impl(X, X_2d, k):
 @tf.function
 def missing_neighbors_impl(X, X_2d, k):
     k = tf.cast(k, tf.int32)
+    n = tf.shape(X)[0]
+    k = tf.minimum(k, n - 1)
 
     D_high = distance.psqdist(X)
     D_low = distance.psqdist(X_2d)
 
-    _, knn_orig = distance.nearest_k(D_high, k)
-    _, knn_proj = distance.nearest_k(D_low, k)
+    _, knn_orig = distance.nearest_k(D_high, k=k + 1)
+    _, knn_proj = distance.nearest_k(D_low, k=k + 1)
+    knn_orig = knn_orig[:, 1:]
+    knn_proj = knn_proj[:, 1:]
 
     missing_neighbors = tf.sparse.reduce_sum(
         tf.sparse.map_values(tf.ones_like, tf.sets.difference(knn_orig, knn_proj)), axis=-1
@@ -45,12 +53,16 @@ def missing_neighbors_impl(X, X_2d, k):
 @tf.function
 def true_neighbors_impl(X, X_2d, k):
     k = tf.cast(k, tf.int32)
+    n = tf.shape(X)[0]
+    k = tf.minimum(k, n - 1)
 
     D_high = distance.psqdist(X)
     D_low = distance.psqdist(X_2d)
 
-    _, knn_orig = distance.nearest_k(D_high, k)
-    _, knn_proj = distance.nearest_k(D_low, k)
+    _, knn_orig = distance.nearest_k(D_high, k=k + 1)
+    _, knn_proj = distance.nearest_k(D_low, k=k + 1)
+    knn_orig = knn_orig[:, 1:]
+    knn_proj = knn_proj[:, 1:]
 
     true_neighbors = tf.sparse.reduce_sum(
         tf.sparse.map_values(tf.ones_like, tf.sets.intersection(knn_orig, knn_proj)), axis=-1

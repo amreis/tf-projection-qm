@@ -9,7 +9,10 @@ from tensorflow_projection_qm.util import distance
 @tf.function
 def neighborhood_hit_impl(X_2d, y, k):
     D_low = distance.psqdist(X_2d)
-    _, topk_ixs = distance.nearest_k(D_low, k)
+    n = tf.shape(X_2d)[0]
+    k = tf.minimum(k, n-1)
+    _, topk_ixs = distance.nearest_k(D_low, k=k+1)
+    topk_ixs = topk_ixs[:, 1:]
 
     return tf.reduce_mean(tf.cast(tf.gather(y, topk_ixs) == y[:, tf.newaxis], tf.float64), -1)
 
