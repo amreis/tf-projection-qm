@@ -47,7 +47,7 @@ def trustworthiness_with_local(X, X_2d, k: int) -> tuple[tf.Tensor, tf.Tensor]:
 
 
 @tf.function
-def class_aware_trustworthiness_impl(X, X_2d, y, k, n_classes):
+def class_aware_trustworthiness_impl(X, X_2d, y, k):
     k = tf.cast(k, tf.int32)
     D_high = distance.psqdist(X)
     D_low = distance.psqdist(X_2d)
@@ -80,14 +80,12 @@ def class_aware_trustworthiness_impl(X, X_2d, y, k, n_classes):
     return tf.squeeze(1 - tf.math.multiply_no_nan(1 / norm_factor, trust_t))
 
 
-def class_aware_trustworthiness(X, X_2d, y, k, n_classes):
-    return tf.reduce_mean(
-        class_aware_trustworthiness_impl(X, X_2d, y, tf.constant(k), tf.constant(n_classes))
-    )
+def class_aware_trustworthiness(X, X_2d, y, k):
+    return tf.reduce_mean(class_aware_trustworthiness_impl(X, X_2d, y, tf.constant(k)))
 
 
-def class_aware_trustworthiness_with_local(X, X_2d, y, k, n_classes):
-    per_point = class_aware_trustworthiness_impl(X, X_2d, y, tf.constant(k), tf.constant(n_classes))
+def class_aware_trustworthiness_with_local(X, X_2d, y, k):
+    per_point = class_aware_trustworthiness_impl(X, X_2d, y, tf.constant(k))
     return tf.reduce_mean(per_point), per_point
 
 
@@ -121,12 +119,12 @@ class ClassAwareTrustworthiness(LocalizableMetric):
 
     @property
     def config(self):
-        return {"k": self.k, "n_classes": self.n_classes}
+        return {"k": self.k}
 
     def measure(self, X, X_2d, y):
         if self._with_local:
-            return class_aware_trustworthiness_with_local(X, X_2d, y, self.k, self.n_classes)
-        return class_aware_trustworthiness(X, X_2d, y, self.k, self.n_classes)
+            return class_aware_trustworthiness_with_local(X, X_2d, y, self.k)
+        return class_aware_trustworthiness(X, X_2d, y, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"], args["y"])
