@@ -7,6 +7,7 @@ from .mean_rel_rank_error import MRREData, MRREProj
 from .neighborhood_hit import NeighborhoodHit
 from .neighbors import FalseNeighbors, MissingNeighbors, TrueNeighbors
 from .pearson_correlation import PearsonCorrelation
+from .procrustes import Procrustes
 from .shepard_goodness import ShepardGoodness
 from .stress import NormalizedStress, ScaleNormalizedStress
 from .trustworthiness import ClassAwareTrustworthiness, Trustworthiness
@@ -22,6 +23,7 @@ _ALL_LOCALIZABLE_METRICS: tuple[metric.LocalizableMetric, ...] = (
     FalseNeighbors(),
     MissingNeighbors(),
     TrueNeighbors(),
+    Procrustes(),
     ClassAwareTrustworthiness(),
     Trustworthiness(),
 )
