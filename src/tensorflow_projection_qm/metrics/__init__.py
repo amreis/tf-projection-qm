@@ -1,38 +1,36 @@
-from . import (
-    avg_local_error,
-    continuity,
-    distance_consistency,
-    jaccard,
-    mean_rel_rank_error,
-    metric,
-    neighborhood_hit,
-    neighbors,
-    pearson_correlation,
-    shepard_goodness,
-    stress,
-    trustworthiness,
-)
+from . import metric
+from .avg_local_error import AverageLocalError
+from .continuity import ClassAwareContinuity, Continuity
+from .distance_consistency import DistanceConsistency
+from .jaccard import Jaccard
+from .mean_rel_rank_error import MRREData, MRREProj
+from .neighborhood_hit import NeighborhoodHit
+from .neighbors import FalseNeighbors, MissingNeighbors, TrueNeighbors
+from .pearson_correlation import PearsonCorrelation
+from .shepard_goodness import ShepardGoodness
+from .stress import NormalizedStress, ScaleNormalizedStress
+from .trustworthiness import ClassAwareTrustworthiness, Trustworthiness
 
 _ALL_LOCALIZABLE_METRICS: tuple[metric.LocalizableMetric, ...] = (
-    avg_local_error.AverageLocalError(),
-    continuity.ClassAwareContinuity(),
-    continuity.Continuity(),
-    jaccard.Jaccard(),
-    mean_rel_rank_error.MRREData(),
-    mean_rel_rank_error.MRREProj(),
-    neighborhood_hit.NeighborhoodHit(),
-    neighbors.FalseNeighbors(),
-    neighbors.MissingNeighbors(),
-    neighbors.TrueNeighbors(),
-    trustworthiness.ClassAwareTrustworthiness(),
-    trustworthiness.Trustworthiness(),
+    AverageLocalError(),
+    ClassAwareContinuity(),
+    Continuity(),
+    Jaccard(),
+    MRREData(),
+    MRREProj(),
+    NeighborhoodHit(),
+    FalseNeighbors(),
+    MissingNeighbors(),
+    TrueNeighbors(),
+    ClassAwareTrustworthiness(),
+    Trustworthiness(),
 )
 _ALL_METRICS: tuple[metric.Metric, ...] = _ALL_LOCALIZABLE_METRICS + (
-    distance_consistency.DistanceConsistency(),
-    pearson_correlation.PearsonCorrelation(),
-    shepard_goodness.ShepardGoodness(),
-    stress.NormalizedStress(),
-    stress.ScaleNormalizedStress(),
+    DistanceConsistency(),
+    PearsonCorrelation(),
+    ShepardGoodness(),
+    NormalizedStress(),
+    ScaleNormalizedStress(),
 )
 _ALL_METRICS_METRICSET = metric.MetricSet(list(_ALL_METRICS))
 

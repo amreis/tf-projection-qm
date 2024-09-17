@@ -63,7 +63,7 @@ def class_aware_trustworthiness_impl(X, X_2d, y, k, n_classes):
     ixs_orig = tf.argsort(nn_orig)
 
     knn_orig = nn_orig[:, 1 : k + 1]
-    knn_proj = distance.nearest_k(D_low, k=k + 1)[1][..., 1:]
+    knn_proj = distance.nearest_k(D_low, k=k + 1)[1][:, 1:]
 
     false = tf.sparse.to_dense(tf.sets.difference(knn_proj, knn_orig), default_value=-1)
     classes = tf.where(false >= 0, tf.gather(y, tf.where(false >= 0, false, 0)), -1)
