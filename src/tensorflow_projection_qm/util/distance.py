@@ -42,6 +42,36 @@ def sort_distances(D) -> tf.Tensor:
 
 @tf.function
 def nearest_k(D, k) -> tuple[tf.Tensor, tf.Tensor]:
+    """Adaptation of tf.math.top_k to return smallest k instead.
+
+    Please keep in mind that this function follows the invariant that the closest neighbor
+    of a given data point is *itself*. If you want to find k-nearest neighbors without
+    counting the element itself, use k+1 as an argument for this function and slice the
+    return values accordingly. For instance:
+
+    >>> D = tf.convert_to_tensor([
+    ...         [0.0, 1.0, 0.0],
+    ...         [1.0, 0.0, 0.5],
+    ...         [0.0, 0.5, 0.0]], dtype=tf.float64)
+    >>> values, indices_2nn = nearest_k(D, k=2)
+    >>> indices_2nn.numpy()
+    array([[0, 2],
+           [1, 2],
+           [2, 0]], dtype=int32)
+    >>> values, indices_3nn = nearest_k(D, k=2 + 1)
+    >>> indices_2nn_excl = indices_3nn[..., 1:]  # or indices_3nn[:, 1:]
+    >>> indices_2nn_excl.numpy()
+    array([[2, 1],
+           [2, 0],
+           [0, 1]], dtype=int32)
+
+    Args:
+        D (tf.Tensor): an n x n Tensor containing distances (a distance matrix)
+        k (tf.Tensor | int): a scalar, the number of nearest neighbors to return
+
+    Returns:
+        nearest_k (tf.Tensor, tf.Tensor): same as `tf.math.top_k` but for the smallest k.
+    """
     return tf.math.top_k(-(D - tf.eye(tf.shape(D)[0], dtype=D.dtype)), k=k)
 
 
