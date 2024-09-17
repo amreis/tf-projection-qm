@@ -51,10 +51,22 @@ class MetricSet:
     def set_default(self, **kwargs):
         self.defaults |= kwargs
 
+    def _unique_name_for(self, m: Metric) -> str:
+        same_metric = [m_i for m_i in self.metrics if type(m) is type(m_i)]
+        if len(same_metric) == 1:
+            return m.name
+
+        params_vals = [{(k, v) for k, v in m_i.config.items()} for m_i in same_metric]
+        redundant_params = params_vals[0]
+        # params that are the same across all instances of the same metric
+        # do not need to make it into the identifier.
+        redundant_params.intersection_update(*params_vals[1:])
+        return f'{m.name}_{"_".join(f"{k}={v}" for k, v in sorted(m.config.items() - redundant_params))}'
+
     @tf.function
     def _measure(self, X, X_2d, y=None):
         return {
-            m.name: m.set_if_missing(self.defaults).measure_from_dict(
+            self._unique_name_for(m): m.set_if_missing(self.defaults).measure_from_dict(
                 {"X": X, "X_2d": X_2d, "y": y}
             )
             for m in self.metrics
