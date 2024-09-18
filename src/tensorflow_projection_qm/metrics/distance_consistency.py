@@ -1,6 +1,5 @@
 from typing import Optional
 
-import numpy as np
 import tensorflow as tf
 
 from tensorflow_projection_qm.metrics.metric import Metric
@@ -12,11 +11,9 @@ def distance_consistency_impl(X_2d, y, n_classes):
 
     X_2d = tf.gather(X_2d, y_sort_ixs)  # re-order, grouped per class
     y_sorted = tf.gather(y, y_sort_ixs)
-    uniq, _, sizes = tf.unique_with_counts(y_sorted)
-    per_class = tf.split(X_2d, sizes, num=n_classes)
-
-    centroids = tf.stack(
-        [tf.reduce_mean(single_class_data, axis=0) for single_class_data in per_class]
+    uniq, _ = tf.unique(y_sorted)
+    centroids = tf.reduce_mean(
+        tf.ragged.stack_dynamic_partitions(X_2d, y_sorted, n_classes), axis=1
     )
 
     closest_centroid = tf.argmin(
