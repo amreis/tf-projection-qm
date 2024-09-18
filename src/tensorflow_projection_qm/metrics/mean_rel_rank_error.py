@@ -60,12 +60,12 @@ def mrre_proj_impl(X, X_2d, k):
 
 
 def mrre_data_with_local(X, X_2d, k):
-    per_point = mrre_data_impl(X, X_2d, tf.constant(k))
+    per_point = mrre_data_impl(X, X_2d, k)
     return tf.reduce_mean(per_point), per_point
 
 
 def mrre_proj_with_local(X, X_2d, k):
-    per_point = mrre_proj_impl(X, X_2d, tf.constant(k))
+    per_point = mrre_proj_impl(X, X_2d, k)
     return tf.reduce_mean(per_point), per_point
 
 
@@ -82,7 +82,7 @@ def mrre_data(X, X_2d, k):
     Returns:
         tf.Tensor: a Tensor containing a single scalar, the metric value.
     """
-    return tf.reduce_mean(mrre_data_impl(X, X_2d, tf.constant(k)))
+    return tf.reduce_mean(mrre_data_impl(X, X_2d, k))
 
 
 def mrre_proj(X, X_2d, k):
@@ -98,7 +98,7 @@ def mrre_proj(X, X_2d, k):
     Returns:
         tf.Tensor: a Tensor containing a single scalar, the metric value.
     """
-    return tf.reduce_mean(mrre_proj_impl(X, X_2d, tf.constant(k)))
+    return tf.reduce_mean(mrre_proj_impl(X, X_2d, k))
 
 
 class MRREData(LocalizableMetric):

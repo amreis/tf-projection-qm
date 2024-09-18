@@ -72,29 +72,29 @@ def true_neighbors_impl(X, X_2d, k):
 
 
 def false_neighbors(X, X_2d, k):
-    return tf.reduce_mean(false_neighbors_impl(X, X_2d, tf.constant(k)))
+    return tf.reduce_mean(false_neighbors_impl(X, X_2d, k))
 
 
 def false_neighbors_with_local(X, X_2d, k):
-    per_point = false_neighbors_impl(X, X_2d, tf.constant(k))
+    per_point = false_neighbors_impl(X, X_2d, k)
     return tf.reduce_mean(per_point), per_point
 
 
 def missing_neighbors(X, X_2d, k):
-    return tf.reduce_mean(missing_neighbors_impl(X, X_2d, tf.constant(k)))
+    return tf.reduce_mean(missing_neighbors_impl(X, X_2d, k))
 
 
 def missing_neighbors_with_local(X, X_2d, k):
-    per_point = missing_neighbors_impl(X, X_2d, tf.constant(k))
+    per_point = missing_neighbors_impl(X, X_2d, k)
     return tf.reduce_mean(per_point), per_point
 
 
 def true_neighbors(X, X_2d, k):
-    return tf.reduce_mean(true_neighbors_impl(X, X_2d, tf.constant(k)))
+    return tf.reduce_mean(true_neighbors_impl(X, X_2d, k))
 
 
 def true_neighbors_with_local(X, X_2d, k):
-    per_point = true_neighbors_impl(X, X_2d, tf.constant(k))
+    per_point = true_neighbors_impl(X, X_2d, k)
     return tf.reduce_mean(per_point), per_point
 
 

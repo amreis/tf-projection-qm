@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, TypeVar
+from typing import Iterable, Optional, TypeVar
 
 import tensorflow as tf
 
@@ -46,10 +46,14 @@ class LocalizableMetric(Metric):
 class MetricSet:
     def __init__(self, metrics: Iterable[Metric], defaults: dict = {}) -> None:
         self.metrics = list(metrics)
-        self.defaults: dict = {} | defaults
+        self.defaults: dict[str, Optional[tf.Variable]] = {} | defaults
 
     def set_default(self, **kwargs):
-        self.defaults |= kwargs
+        for k, v in kwargs.items():
+            if isinstance(_var := self.defaults.get(k), tf.Variable):
+                _var.assign(v)
+            else:
+                self.defaults[k] = tf.Variable(v)
 
     def _unique_name_for(self, m: Metric) -> str:
         same_metric = [m_i for m_i in self.metrics if type(m) is type(m_i)]

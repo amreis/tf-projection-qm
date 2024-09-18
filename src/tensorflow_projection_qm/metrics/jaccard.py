@@ -42,11 +42,11 @@ def jaccard(X, X_2d, k):
     Returns:
         tf.Tensor: the scalar value of the Jaccard metric for the whole projection.
     """
-    return tf.reduce_mean(jaccard_impl(X, X_2d, tf.constant(k)))
+    return tf.reduce_mean(jaccard_impl(X, X_2d, k))
 
 
 def jaccard_with_local(X, X_2d, k) -> tuple[tf.Tensor, tf.Tensor]:
-    per_point = jaccard_impl(X, X_2d, tf.constant(k))
+    per_point = jaccard_impl(X, X_2d, k)
     return tf.reduce_mean(per_point), per_point
 
 
