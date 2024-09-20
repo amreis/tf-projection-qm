@@ -18,11 +18,11 @@ def neighborhood_hit_impl(X_2d, y, k):
 
 
 def neighborhood_hit(X_2d, y, k):
-    return tf.reduce_mean(neighborhood_hit_impl(X_2d, y, k))
+    return tf.reduce_mean(neighborhood_hit_impl(X_2d, y, tf.constant(k)))
 
 
 def neighborhood_hit_with_local(X_2d, y, k) -> tuple[tf.Tensor, tf.Tensor]:
-    per_point = neighborhood_hit_impl(X_2d, y, k)
+    per_point = neighborhood_hit_impl(X_2d, y, tf.constant(k))
     return tf.reduce_mean(per_point), per_point
 
 

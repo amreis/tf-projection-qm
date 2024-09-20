@@ -63,11 +63,11 @@ def procrustes_impl(X, X_2d, k):
 
 
 def procrustes(X, X_2d, k):
-    return tf.reduce_mean(procrustes_impl(X, X_2d, k))
+    return tf.reduce_mean(procrustes_impl(X, X_2d, tf.constant(k)))
 
 
 def procrustes_with_local(X, X_2d, k):
-    per_point = procrustes_impl(X, X_2d, k)
+    per_point = procrustes_impl(X, X_2d, tf.constant(k))
     return tf.reduce_mean(per_point), per_point
 
 

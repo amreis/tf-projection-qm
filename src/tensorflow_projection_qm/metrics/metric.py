@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, Optional, TypeVar
+from typing import Any, Iterable, Optional, TypeVar
 
 import tensorflow as tf
 
@@ -13,6 +13,17 @@ class Metric(ABC):
 
     def __init__(self) -> None:
         super().__init__()
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name.startswith("_"):
+            super().__setattr__(name, value)
+
+        if getattr(self, name, None) is None:
+            self.__dict__[name] = tf.Variable(value) if value is not None else None
+        elif isinstance(_var := getattr(self, name), tf.Variable):
+            _var.assign(value)
+        else:
+            self.__dict__[name] = tf.Variable(value)
 
     @property
     @abstractmethod
