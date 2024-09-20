@@ -16,14 +16,25 @@ class Metric(ABC):
 
     def __setattr__(self, name: str, value: Any) -> None:
         if name.startswith("_"):
-            super().__setattr__(name, value)
+            # Attributes not part of the public API are handled normally.
+            return super().__setattr__(name, value)
+
+        if value is None:
+            self.__dict__[name] = None
+            return
 
         if getattr(self, name, None) is None:
-            self.__dict__[name] = tf.Variable(value) if value is not None else None
+            # self.$name does not exist or is None.
+            # After this line, self.$name will exist AND be a tf.Variable
+            self.__dict__[name] = value if isinstance(value, tf.Variable) else tf.Variable(value)
         elif isinstance(_var := getattr(self, name), tf.Variable):
+            # self.$name exists and is already a tf.Variable
             _var.assign(value)
         else:
-            self.__dict__[name] = tf.Variable(value)
+            # There is no moment where self.$name exists without being None
+            # (covered by if) and is not a tf.Variable (covered by elif), so
+            # an else is not needed.
+            raise NotImplementedError("should not happen")
 
     @property
     @abstractmethod
