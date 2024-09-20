@@ -24,6 +24,11 @@ from tensorflow_projection_qm.metrics.metric import LocalizableMetric
 from tensorflow_projection_qm.util import distance
 
 
+def _svd_part(Z_i):
+    s_i, u_i, v_i = tf.linalg.svd(Z_i)
+    return s_i, u_i, v_i
+
+
 @tf.function
 def procrustes_impl(X, X_2d, k):
     n = tf.shape(X)[0]
@@ -41,7 +46,19 @@ def procrustes_impl(X, X_2d, k):
         proj_neighborhoods - tf.reduce_mean(proj_neighborhoods, -2, keepdims=True),
         transpose_a=True,
     )
-    s_i, u_i, v_i = tf.linalg.svd(Z)
+    if tf.shape(X)[1] ** 2 >= 2_000_000:
+        s_i, u_i, v_i = tf.map_fn(
+            _svd_part,
+            Z,
+            fn_output_signature=(
+                tf.TensorSpec(shape=[None], dtype=X.dtype),
+                tf.TensorSpec(shape=[None, None], dtype=X.dtype),
+                tf.TensorSpec(shape=[None, None], dtype=X.dtype),
+            ),
+            swap_memory=True,
+        )
+    else:
+        s_i, u_i, v_i = tf.linalg.svd(Z)
 
     c_i = tf.reduce_sum(s_i, -1) / tf.reduce_sum(proj_neighborhoods**2, axis=(-2, -1))
 
