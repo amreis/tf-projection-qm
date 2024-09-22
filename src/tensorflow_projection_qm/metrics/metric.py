@@ -121,8 +121,7 @@ class MetricSet:
 
     @tf.function
     def _measure(self, X, X_2d, y=None):
-        params_vals = [{(k, v) for k, v in m_i.config.items()} for m_i in same_metric]
-        params_vals = [{(k, v) for k, v in m_i.config.items()} for m_i in same_metric]
+        print("Tracing!")
         return {
             self._unique_name_for(m): m.set_if_missing(self.defaults).measure_from_dict(
                 {"X": X, "X_2d": X_2d, "y": y}
