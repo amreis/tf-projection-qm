@@ -30,6 +30,7 @@ def distance_consistency(X_2d, y, n_classes):
 
 class DistanceConsistency(Metric):
     name = "distance_consistency"
+    _fn = distance_consistency_impl
 
     def __init__(self, n_classes: Optional[int] = None) -> None:
         super().__init__()
@@ -40,7 +41,7 @@ class DistanceConsistency(Metric):
         return {"n_classes": self.n_classes}
 
     def measure(self, X_2d, y):
-        return distance_consistency(X_2d, y, self.n_classes)
+        return self._measure_impl(X_2d, y, self.n_classes)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X_2d"], args["y"])

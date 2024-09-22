@@ -92,6 +92,7 @@ def class_aware_continuity_with_local(X, X_2d, y, k):
 
 class Continuity(LocalizableMetric):
     name = "continuity"
+    _fn = continuity_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -102,9 +103,7 @@ class Continuity(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return continuity_with_local(X, X_2d, self.k)
-        return continuity(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
@@ -112,6 +111,7 @@ class Continuity(LocalizableMetric):
 
 class ClassAwareContinuity(LocalizableMetric):
     name = "class_aware_continuity"
+    _fn = class_aware_continuity_impl
 
     def __init__(self, k: Optional[int] = None, n_classes: Optional[int] = None) -> None:
         super().__init__()
@@ -123,9 +123,7 @@ class ClassAwareContinuity(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d, y):
-        if self._with_local:
-            return class_aware_continuity_with_local(X, X_2d, y, self.k)
-        return class_aware_continuity(X, X_2d, y, self.k)
+        return self._measure_impl(X, X_2d, y, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"], args["y"])

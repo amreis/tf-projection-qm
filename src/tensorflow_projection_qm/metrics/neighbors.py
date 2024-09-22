@@ -100,6 +100,7 @@ def true_neighbors_with_local(X, X_2d, k):
 
 class FalseNeighbors(LocalizableMetric):
     name = "false_neighbors"
+    _fn = false_neighbors_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -110,9 +111,7 @@ class FalseNeighbors(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return false_neighbors_with_local(X, X_2d, self.k)
-        return false_neighbors(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
@@ -120,6 +119,7 @@ class FalseNeighbors(LocalizableMetric):
 
 class MissingNeighbors(LocalizableMetric):
     name = "missing_neighbors"
+    _fn = missing_neighbors_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -130,9 +130,7 @@ class MissingNeighbors(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return missing_neighbors_with_local(X, X_2d, self.k)
-        return missing_neighbors(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
@@ -140,6 +138,7 @@ class MissingNeighbors(LocalizableMetric):
 
 class TrueNeighbors(LocalizableMetric):
     name = "true_neighbors"
+    _fn = true_neighbors_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -150,9 +149,7 @@ class TrueNeighbors(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return true_neighbors_with_local(X, X_2d, self.k)
-        return true_neighbors(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])

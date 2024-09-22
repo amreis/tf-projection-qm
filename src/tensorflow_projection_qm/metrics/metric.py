@@ -11,6 +11,10 @@ TMetric = TypeVar("TMetric", bound="Metric")
 class Metric(ABC):
     name: str
 
+    @staticmethod
+    @abstractmethod
+    def _fn(*args, **kwargs): ...
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -41,10 +45,24 @@ class Metric(ABC):
     def config(self) -> dict: ...
 
     @abstractmethod
-    def measure(self, *args, **kwargs): ...
+    def measure(self, *args, **kwargs):
+        """Entry point to calculate the metric from input tensors
+
+        Base classes must implement this function by calling self._measure_impl
+        with the correct set of arguments (those of their corresponding _fn). When
+        calling self._measure_impl, base classes should provide all parameters
+        necessary for the metric computation. These parameters should be part of
+        the metric's `config` property.
+        """
 
     @abstractmethod
-    def measure_from_dict(self, args: dict): ...
+    def measure_from_dict(self, args: dict):
+        """Entry point to calculate the metric from a dictionary argument
+
+        Base classes should implement this by calling self.measure with the
+        correct elements extracted from args. For example,
+        self.measure(args["X"], args["y"]).
+        """
 
     def set_if_missing(self: TMetric, params) -> TMetric:
         new = type(self)(**self.config)
@@ -52,6 +70,9 @@ class Metric(ABC):
             if k in params and getattr(self, k) is None:
                 setattr(new, k, params[k])
         return new
+
+    def _measure_impl(self, *args):
+        return type(self)._fn(*args)
 
 
 class LocalizableMetric(Metric):
@@ -63,6 +84,12 @@ class LocalizableMetric(Metric):
         new = type(self)(**self.config)
         new._with_local = True
         return new
+
+    def _measure_impl(self, *args, agg=tf.reduce_mean):
+        if self._with_local:
+            per_point = type(self)._fn(*args)
+            return agg(per_point), per_point
+        return agg(type(self)._fn(*args))
 
 
 class MetricSet:
@@ -87,10 +114,15 @@ class MetricSet:
         # params that are the same across all instances of the same metric
         # do not need to make it into the identifier.
         redundant_params.intersection_update(*params_vals[1:])
-        return f'{m.name}_{"_".join(f"{k}={v}" for k, v in sorted(m.config.items() - redundant_params))}'
+        return (
+            f'{m.name}_'
+            f'{"_".join(f"{k}={v}" for k, v in sorted(m.config.items() - redundant_params))}'
+        )
 
     @tf.function
     def _measure(self, X, X_2d, y=None):
+        params_vals = [{(k, v) for k, v in m_i.config.items()} for m_i in same_metric]
+        params_vals = [{(k, v) for k, v in m_i.config.items()} for m_i in same_metric]
         return {
             self._unique_name_for(m): m.set_if_missing(self.defaults).measure_from_dict(
                 {"X": X, "X_2d": X_2d, "y": y}

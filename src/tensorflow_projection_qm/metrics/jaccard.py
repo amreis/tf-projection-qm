@@ -50,6 +50,7 @@ def jaccard_with_local(X, X_2d, k) -> tuple[tf.Tensor, tf.Tensor]:
 
 class Jaccard(LocalizableMetric):
     name = "jaccard"
+    _fn = jaccard_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -60,9 +61,7 @@ class Jaccard(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return jaccard_with_local(X, X_2d, self.k)
-        return jaccard(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, data_dict: dict[str, object]):
         return self.measure(data_dict["X"], data_dict["X_2d"])

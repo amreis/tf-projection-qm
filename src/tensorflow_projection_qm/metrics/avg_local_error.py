@@ -29,6 +29,7 @@ def average_local_error_with_local(X, X_2d):
 
 class AverageLocalError(LocalizableMetric):
     name = "average_local_error"
+    _fn = average_local_error_impl
 
     def __init__(self) -> None:
         super().__init__()
@@ -38,9 +39,7 @@ class AverageLocalError(LocalizableMetric):
         return {}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return average_local_error_with_local(X, X_2d)
-        return average_local_error(X, X_2d)
+        return self._measure_impl(X, X_2d)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])

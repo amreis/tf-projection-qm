@@ -103,19 +103,19 @@ def mrre_proj(X, X_2d, k):
 
 class MRREData(LocalizableMetric):
     name = "mrre_data"
+    _fn = mrre_data_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
         self.k = k
+        self._fn = mrre_data_impl
 
     @property
     def config(self):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return mrre_data_with_local(X, X_2d, self.k)
-        return mrre_data(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
@@ -123,6 +123,7 @@ class MRREData(LocalizableMetric):
 
 class MRREProj(LocalizableMetric):
     name = "mrre_proj"
+    _fn = mrre_proj_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -133,9 +134,7 @@ class MRREProj(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return mrre_proj_with_local(X, X_2d, self.k)
-        return mrre_proj(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])

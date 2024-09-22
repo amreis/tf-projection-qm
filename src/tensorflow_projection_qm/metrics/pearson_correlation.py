@@ -26,6 +26,7 @@ def pearson_correlation(X, X_2d):
 
 class PearsonCorrelation(Metric):
     name = "pearson_correlation"
+    _fn = pearson_correlation_impl
 
     def __init__(self) -> None:
         super().__init__()
@@ -35,7 +36,7 @@ class PearsonCorrelation(Metric):
         return {}
 
     def measure(self, X, X_2d):
-        return pearson_correlation(X, X_2d)
+        return self._measure_impl(X, X_2d)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])

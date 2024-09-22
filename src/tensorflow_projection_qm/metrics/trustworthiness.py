@@ -91,6 +91,7 @@ def class_aware_trustworthiness_with_local(X, X_2d, y, k):
 
 class Trustworthiness(LocalizableMetric):
     name = "trustworthiness"
+    _fn = trustworthiness_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -101,9 +102,7 @@ class Trustworthiness(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return trustworthiness_with_local(X, X_2d, self.k)
-        return trustworthiness(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
@@ -111,6 +110,7 @@ class Trustworthiness(LocalizableMetric):
 
 class ClassAwareTrustworthiness(LocalizableMetric):
     name = "class_aware_trustworthiness"
+    _fn = class_aware_trustworthiness_impl
 
     def __init__(self, k: Optional[int] = None, n_classes: Optional[int] = None) -> None:
         super().__init__()
@@ -122,9 +122,7 @@ class ClassAwareTrustworthiness(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d, y):
-        if self._with_local:
-            return class_aware_trustworthiness_with_local(X, X_2d, y, self.k)
-        return class_aware_trustworthiness(X, X_2d, y, self.k)
+        return self._measure_impl(X, X_2d, y, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"], args["y"])

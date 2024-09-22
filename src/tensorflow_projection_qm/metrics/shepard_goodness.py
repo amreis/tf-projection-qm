@@ -23,6 +23,7 @@ def shepard_goodness(X, X_2d):
 
 class ShepardGoodness(Metric):
     name = "shepard_goodness"
+    _fn = shepard_goodness_impl
 
     def __init__(self) -> None:
         super().__init__()
@@ -32,7 +33,7 @@ class ShepardGoodness(Metric):
         return {}
 
     def measure(self, X, X_2d):
-        return shepard_goodness(X, X_2d)
+        return self._measure_impl(X, X_2d)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])

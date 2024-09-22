@@ -69,6 +69,7 @@ def scale_normalized_stress(X, X_2d):
 
 class NormalizedStress(Metric):
     name = "normalized_stress"
+    _fn = normalized_stress
 
     def __init__(self) -> None:
         super().__init__()
@@ -78,7 +79,7 @@ class NormalizedStress(Metric):
         return {}
 
     def measure(self, X, X_2d):
-        return normalized_stress(X, X_2d)
+        return self._measure_impl(X, X_2d)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
@@ -86,6 +87,7 @@ class NormalizedStress(Metric):
 
 class ScaleNormalizedStress(Metric):
     name = "scale_normalized_stress"
+    _fn = scale_normalized_stress
 
     def __init__(self) -> None:
         super().__init__()
@@ -95,7 +97,7 @@ class ScaleNormalizedStress(Metric):
         return {}
 
     def measure(self, X, X_2d):
-        return scale_normalized_stress(X, X_2d)
+        return self._measure_impl(X, X_2d)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])

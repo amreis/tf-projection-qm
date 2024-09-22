@@ -10,8 +10,8 @@ from tensorflow_projection_qm.util import distance
 def neighborhood_hit_impl(X_2d, y, k):
     D_low = distance.psqdist(X_2d)
     n = tf.shape(X_2d)[0]
-    k = tf.minimum(k, n-1)
-    _, topk_ixs = distance.nearest_k(D_low, k=k+1)
+    k = tf.minimum(k, n - 1)
+    _, topk_ixs = distance.nearest_k(D_low, k=k + 1)
     topk_ixs = topk_ixs[:, 1:]
 
     return tf.reduce_mean(tf.cast(tf.gather(y, topk_ixs) == y[:, tf.newaxis], tf.float64), -1)
@@ -28,6 +28,7 @@ def neighborhood_hit_with_local(X_2d, y, k) -> tuple[tf.Tensor, tf.Tensor]:
 
 class NeighborhoodHit(LocalizableMetric):
     name = "neighborhood_hit"
+    _fn = neighborhood_hit_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -38,9 +39,7 @@ class NeighborhoodHit(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X_2d, y):
-        if self._with_local:
-            return neighborhood_hit_with_local(X_2d, y, self.k)
-        return neighborhood_hit(X_2d, y, self.k)
+        return self._measure_impl(X_2d, y, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X_2d"], args["y"])

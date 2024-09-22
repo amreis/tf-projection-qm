@@ -90,6 +90,7 @@ def procrustes_with_local(X, X_2d, k):
 
 class Procrustes(LocalizableMetric):
     name = "procrustes"
+    _fn = procrustes_impl
 
     def __init__(self, k: Optional[int] = None) -> None:
         super().__init__()
@@ -100,9 +101,7 @@ class Procrustes(LocalizableMetric):
         return {"k": self.k}
 
     def measure(self, X, X_2d):
-        if self._with_local:
-            return procrustes_with_local(X, X_2d, self.k)
-        return procrustes(X, X_2d, self.k)
+        return self._measure_impl(X, X_2d, self.k)
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
