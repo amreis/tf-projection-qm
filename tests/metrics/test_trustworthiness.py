@@ -1,7 +1,7 @@
-from tensorflow_projection_qm.metrics.trustworthiness import trustworthiness
-
 import numpy as np
 import numpy.testing as npt
+
+from tensorflow_projection_qm.metrics.trustworthiness import trustworthiness
 
 
 def test_single_data_point():

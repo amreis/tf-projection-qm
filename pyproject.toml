@@ -43,6 +43,9 @@ dev-dependencies = [
     "tensorboard-plugin-profile==2.17.0",
 ]
 
+[tool.ruff]
+line-length = 100
+
 [tool.pytest.ini_options]
 addopts = ["--doctest-modules"]
 

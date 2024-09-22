@@ -1,7 +1,7 @@
-from tensorflow_projection_qm.metrics.continuity import class_aware_continuity
-
 import numpy as np
 import numpy.testing as npt
+
+from tensorflow_projection_qm.metrics.continuity import class_aware_continuity
 
 
 def test_single_data_point():
@@ -97,9 +97,7 @@ def test_k_larger_than_dataset_size():
     # If k > n-1 (here n == 10), then we're out of neighbors to use for the
     # computation. The calculation should adapt accordingly (i.e., k shouldn't
     # have an effect on the result).
-    results = [
-        class_aware_continuity(X, X_2d, y, k=_k).numpy() for _k in (10, 20, 1000)
-    ]
+    results = [class_aware_continuity(X, X_2d, y, k=_k).numpy() for _k in (10, 20, 1000)]
 
     npt.assert_allclose(results[0], results[1])
     npt.assert_allclose(results[1], results[2])

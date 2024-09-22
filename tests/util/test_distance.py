@@ -1,9 +1,9 @@
-import pytest
-from tensorflow_projection_qm.util import distance
-
 import numpy as np
 import numpy.testing as npt
+import pytest
 from sklearn.metrics import pairwise_distances
+
+from tensorflow_projection_qm.util import distance
 
 
 class TestPSQDist:

@@ -1,7 +1,7 @@
-from tensorflow_projection_qm.metrics.trustworthiness import class_aware_trustworthiness
-
 import numpy as np
 import numpy.testing as npt
+
+from tensorflow_projection_qm.metrics.trustworthiness import class_aware_trustworthiness
 
 
 def test_single_data_point():
@@ -49,9 +49,7 @@ def test_one_error_diff_class():
     # 0 |     1     |     2      |  Penalty = 1 because 0 and 2 are of diff classes
     # 1 |     2     |     2      |  Penalty = 0
     # 2 |     1     |     1      |  Penalty = 0
-    npt.assert_allclose(
-        class_aware_trustworthiness(X, X_2d, y, k=1).numpy(), 1.0 - 1.0 / 3.0
-    )
+    npt.assert_allclose(class_aware_trustworthiness(X, X_2d, y, k=1).numpy(), 1.0 - 1.0 / 3.0)
 
 
 def test_one_error_same_class():
@@ -99,9 +97,7 @@ def test_k_larger_than_dataset_size():
     # If k > n-1 (here n == 10), then we're out of neighbors to use for the
     # computation. The calculation should adapt accordingly (i.e., k shouldn't
     # have an effect on the result).
-    results = [
-        class_aware_trustworthiness(X, X_2d, y, k=_k).numpy() for _k in (10, 20, 1000)
-    ]
+    results = [class_aware_trustworthiness(X, X_2d, y, k=_k).numpy() for _k in (10, 20, 1000)]
 
     npt.assert_allclose(results[0], results[1])
     npt.assert_allclose(results[1], results[2])

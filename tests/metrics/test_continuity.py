@@ -1,7 +1,7 @@
-from tensorflow_projection_qm.metrics.continuity import continuity
-
 import numpy as np
 import numpy.testing as npt
+
+from tensorflow_projection_qm.metrics.continuity import continuity
 
 
 def test_single_data_point():
