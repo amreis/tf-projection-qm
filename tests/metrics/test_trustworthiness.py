@@ -107,7 +107,7 @@ def test_three_false_neighbors_diff_ranks():
     # 1 |    2, 4   |     2, 0   |  [0] | Penalty = 3 - 2 = 1 (0 is false)
     # 2 |    1, 3   |     1, 3   |  []  | Penalty = 0
     # 3 |    2, 1   |     2, 1   |  []  | Penalty = 0
-    # 4 |    1, 2   |     3, 2   |  [3] | Penalty = 4 - 2 = 1 (1 is missing)
+    # 4 |    1, 2   |     3, 2   |  [3] | Penalty = 4 - 2 = 2 (3 is false)
     npt.assert_allclose(
         trustworthiness(X, X_2d, k=2).numpy(),
         np.mean(1 - np.array([1.0, 1.0, 0.0, 0.0, 2.0]) / (2 * 5 - 3 * 2 - 1)),
