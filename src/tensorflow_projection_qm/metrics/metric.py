@@ -92,6 +92,25 @@ class LocalizableMetric(Metric):
         return agg(type(self)._fn(*args))
 
 
+class ComplementMetricMixin(Metric):
+    # We don't need to override measure_from_dict as it *should*
+    # dispatch to self.measure() anyway. Right now, this is a bit
+    # of a footgun. We should probably abstract measure_from_dict
+    # into a superclass somehow. This would require metrics declaring
+    # the names of the parameters they need to extract from the dict
+
+    @property
+    def config(self):
+        return super().config
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+    def measure(self, *args):
+        out = super().measure(*args)
+        return tf.nest.map_structure(lambda x: 1 - x, out)
+
+
 class MetricSet:
     def __init__(self, metrics: Iterable[Metric], defaults: dict = {}) -> None:
         self.metrics = list(metrics)
