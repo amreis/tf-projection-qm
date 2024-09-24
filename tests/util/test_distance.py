@@ -65,6 +65,23 @@ class TestPSQDist:
 
         npt.assert_array_equal(my_nns, sklearn_nns)
 
+    @pytest.mark.parametrize(
+        "X",
+        [
+            np.array([[1.0]]),
+            np.array([[1.0, 2.0, 3.0]]),
+            np.arange(6, dtype=np.float32).reshape(2, 3),
+            np.arange(128, dtype=np.float32).reshape(32, 4),
+        ],
+    )
+    def test_flat_psqdist(self, X) -> None:
+        flat_D: np.ndarray = distance.flat_psqdist(X).numpy()
+        D: np.ndarray = distance.psqdist(X).numpy()
+
+        npt.assert_equal(flat_D.ndim, 1)
+        npt.assert_equal(flat_D.shape[0], (X.shape[0] * (X.shape[0] - 1)) // 2)
+        npt.assert_equal(flat_D, D[np.triu_indices_from(D, k=1)])
+
 
 class TestCSQDist:
     def test_handles_singleton(self):
