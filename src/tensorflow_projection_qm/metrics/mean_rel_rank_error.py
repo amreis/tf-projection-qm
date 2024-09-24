@@ -9,7 +9,7 @@ from typing import Optional
 
 import tensorflow as tf
 
-from tensorflow_projection_qm.metrics.metric import LocalizableMetric
+from tensorflow_projection_qm.metrics.metric import ComplementMetricMixin, LocalizableMetric
 from tensorflow_projection_qm.util import distance
 
 
@@ -121,6 +121,10 @@ class MRREData(LocalizableMetric):
         return self.measure(args["X"], args["X_2d"])
 
 
+class ComplMRREData(ComplementMetricMixin, MRREData):
+    name = "complement_mrre_data"
+
+
 class MRREProj(LocalizableMetric):
     name = "mrre_proj"
     _fn = mrre_proj_impl
@@ -138,3 +142,7 @@ class MRREProj(LocalizableMetric):
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
+
+
+class ComplMRREProj(ComplementMetricMixin, MRREProj):
+    name = "complement_mrre_proj"

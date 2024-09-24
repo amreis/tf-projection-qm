@@ -2,7 +2,7 @@ from typing import Optional
 
 import tensorflow as tf
 
-from tensorflow_projection_qm.metrics.metric import LocalizableMetric
+from tensorflow_projection_qm.metrics.metric import ComplementMetricMixin, LocalizableMetric
 from tensorflow_projection_qm.util import distance
 
 
@@ -117,6 +117,10 @@ class FalseNeighbors(LocalizableMetric):
         return self.measure(args["X"], args["X_2d"])
 
 
+class ComplFalseNeighbors(ComplementMetricMixin, FalseNeighbors):
+    name = "complement_false_neighbors"
+
+
 class MissingNeighbors(LocalizableMetric):
     name = "missing_neighbors"
     _fn = missing_neighbors_impl
@@ -134,6 +138,10 @@ class MissingNeighbors(LocalizableMetric):
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
+
+
+class ComplMissingNeighbors(ComplementMetricMixin, MissingNeighbors):
+    name = "complement_missing_neighbors"
 
 
 class TrueNeighbors(LocalizableMetric):

@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from tensorflow_projection_qm.metrics.metric import LocalizableMetric
+from tensorflow_projection_qm.metrics.metric import ComplementMetricMixin, LocalizableMetric
 from tensorflow_projection_qm.util import distance
 
 
@@ -43,3 +43,7 @@ class AverageLocalError(LocalizableMetric):
 
     def measure_from_dict(self, args: dict):
         return self.measure(args["X"], args["X_2d"])
+
+
+class ComplAverageLocalError(ComplementMetricMixin, AverageLocalError):
+    name = "complement_average_local_error"
