@@ -60,9 +60,30 @@ class Metric(ABC):
     def measure_from_dict(self, args: dict):
         """Entry point to calculate the metric from a dictionary argument
 
-        Base classes should implement this by calling self.measure with the
-        correct elements extracted from args. For example,
-        self.measure(args["X"], args["y"]).
+        Calls self.measure() using either the names of its arguments as dictionary keys
+        (default behavior) or the names specified through self.set_custom_dict_argnames.
+
+        For example:
+        >>> class MyMetric(Metric):
+        ...   _fn = None
+        ...   @property
+        ...   def config(self):
+        ...     return {}
+        ...
+        ...   def __init__(self):
+        ...     super().__init__()
+        ...
+        ...   def measure(self, X, X_something):
+        ...      print(f"{X = }")
+        ...      print(f"{X_something = }")
+        >>> m = MyMetric()
+        >>> m.measure_from_dict({"X_2d": 1, "X_something": 2, "X": 3})
+        X = 3
+        X_something = 2
+        >>> m.set_custom_dict_argnames(("foo", "bar"))
+        >>> m.measure_from_dict({"X_2d": 1, "foo": 0, "bar": 4, "X_something": 2})
+        X = 0
+        X_something = 4
         """
         if self._custom_dict_argnames is not None:
             return self.measure(*(args[argname] for argname in self._custom_dict_argnames))
