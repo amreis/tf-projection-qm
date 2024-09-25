@@ -40,6 +40,3 @@ class NeighborhoodHit(LocalizableMetric):
 
     def measure(self, X_2d, y):
         return self._measure_impl(X_2d, y, self.k)
-
-    def measure_from_dict(self, args: dict):
-        return self.measure(args["X_2d"], args["y"])

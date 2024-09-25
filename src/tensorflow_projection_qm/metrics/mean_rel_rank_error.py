@@ -117,9 +117,6 @@ class MRREData(LocalizableMetric):
     def measure(self, X, X_2d):
         return self._measure_impl(X, X_2d, self.k)
 
-    def measure_from_dict(self, args: dict):
-        return self.measure(args["X"], args["X_2d"])
-
 
 class ComplMRREData(ComplementMetricMixin, MRREData):
     name = "complement_mrre_data"
@@ -139,9 +136,6 @@ class MRREProj(LocalizableMetric):
 
     def measure(self, X, X_2d):
         return self._measure_impl(X, X_2d, self.k)
-
-    def measure_from_dict(self, args: dict):
-        return self.measure(args["X"], args["X_2d"])
 
 
 class ComplMRREProj(ComplementMetricMixin, MRREProj):

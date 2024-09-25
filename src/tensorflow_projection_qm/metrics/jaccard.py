@@ -62,6 +62,3 @@ class Jaccard(LocalizableMetric):
 
     def measure(self, X, X_2d):
         return self._measure_impl(X, X_2d, self.k)
-
-    def measure_from_dict(self, data_dict: dict[str, object]):
-        return self.measure(data_dict["X"], data_dict["X_2d"])

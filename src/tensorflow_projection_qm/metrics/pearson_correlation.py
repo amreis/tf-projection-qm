@@ -37,6 +37,3 @@ class PearsonCorrelation(Metric):
 
     def measure(self, X, X_2d):
         return self._measure_impl(X, X_2d)
-
-    def measure_from_dict(self, args: dict):
-        return self.measure(args["X"], args["X_2d"])

@@ -1,3 +1,4 @@
+import inspect
 from abc import ABC, abstractmethod
 from typing import Any, Iterable, Optional, TypeVar
 
@@ -17,6 +18,7 @@ class Metric(ABC):
 
     def __init__(self) -> None:
         super().__init__()
+        self._custom_dict_argnames: Optional[tuple[str, ...]] = None
 
     def __setattr__(self, name: str, value: Any) -> None:
         if name.startswith("_"):
@@ -55,7 +57,6 @@ class Metric(ABC):
         the metric's `config` property.
         """
 
-    @abstractmethod
     def measure_from_dict(self, args: dict):
         """Entry point to calculate the metric from a dictionary argument
 
@@ -63,6 +64,11 @@ class Metric(ABC):
         correct elements extracted from args. For example,
         self.measure(args["X"], args["y"]).
         """
+        if self._custom_dict_argnames is not None:
+            return self.measure(*(args[argname] for argname in self._custom_dict_argnames))
+        return self.measure(
+            *(args[argname] for argname in inspect.signature(self.measure).parameters)
+        )
 
     def set_if_missing(self: TMetric, params) -> TMetric:
         new = type(self)(**self.config)
@@ -70,6 +76,9 @@ class Metric(ABC):
             if k in params and getattr(self, k) is None:
                 setattr(new, k, params[k])
         return new
+
+    def set_custom_dict_argnames(self, argnames: tuple[str, ...]):
+        self._custom_dict_argnames = tuple(argnames)
 
     def _measure_impl(self, *args):
         return type(self)._fn(*args)

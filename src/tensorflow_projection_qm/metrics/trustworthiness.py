@@ -7,7 +7,7 @@ from tensorflow_projection_qm.util import distance
 
 
 @tf.function
-def trustworthiness_impl(X, X_2d, k) -> tf.Tensor:
+def trustworthiness_impl(X: tf.Tensor, X_2d: tf.Tensor, k: tf.Tensor) -> tf.Tensor:
     k = tf.cast(k, tf.int32)
     D_high = distance.psqdist(X)
     D_low = distance.psqdist(X_2d)
@@ -104,9 +104,6 @@ class Trustworthiness(LocalizableMetric):
     def measure(self, X, X_2d):
         return self._measure_impl(X, X_2d, self.k)
 
-    def measure_from_dict(self, args: dict):
-        return self.measure(args["X"], args["X_2d"])
-
 
 class ClassAwareTrustworthiness(LocalizableMetric):
     name = "class_aware_trustworthiness"
@@ -123,6 +120,3 @@ class ClassAwareTrustworthiness(LocalizableMetric):
 
     def measure(self, X, X_2d, y):
         return self._measure_impl(X, X_2d, y, self.k)
-
-    def measure_from_dict(self, args: dict):
-        return self.measure(args["X"], args["X_2d"], args["y"])

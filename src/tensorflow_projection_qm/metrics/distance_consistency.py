@@ -42,6 +42,3 @@ class DistanceConsistency(Metric):
 
     def measure(self, X_2d, y):
         return self._measure_impl(X_2d, y, self.n_classes)
-
-    def measure_from_dict(self, args: dict):
-        return self.measure(args["X_2d"], args["y"])
