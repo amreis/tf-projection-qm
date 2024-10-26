@@ -5,7 +5,7 @@ from .distance_consistency import DistanceConsistency
 from .jaccard import Jaccard
 from .mean_rel_rank_error import MRREData, MRREProj
 from .neighborhood_hit import NeighborhoodHit
-from .neighbors import FalseNeighbors, MissingNeighbors, TrueNeighbors
+from .neighbors import FalseNeighbors, TrueNeighbors
 from .pearson_correlation import PearsonCorrelation
 from .procrustes import Procrustes
 from .shepard_goodness import ShepardGoodness
@@ -21,7 +21,6 @@ _ALL_LOCALIZABLE_METRICS: tuple[metric.LocalizableMetric, ...] = (
     MRREProj(),
     NeighborhoodHit(),
     FalseNeighbors(),
-    MissingNeighbors(),
     TrueNeighbors(),
     Procrustes(),
     ClassAwareTrustworthiness(),

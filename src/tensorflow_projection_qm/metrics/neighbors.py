@@ -117,25 +117,6 @@ class FalseNeighbors(LocalizableMetric):
         return self.measure(args["X"], args["X_2d"])
 
 
-class MissingNeighbors(LocalizableMetric):
-    name = "missing_neighbors"
-    _fn = missing_neighbors_impl
-
-    def __init__(self, k: Optional[int] = None) -> None:
-        super().__init__()
-        self.k = k
-
-    @property
-    def config(self):
-        return {"k": self.k}
-
-    def measure(self, X, X_2d):
-        return self._measure_impl(X, X_2d, self.k)
-
-    def measure_from_dict(self, args: dict):
-        return self.measure(args["X"], args["X_2d"])
-
-
 class TrueNeighbors(LocalizableMetric):
     name = "true_neighbors"
     _fn = true_neighbors_impl
