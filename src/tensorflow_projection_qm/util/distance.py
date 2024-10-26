@@ -102,6 +102,6 @@ def flat_psqdist(X) -> tf.Tensor:
 
     mask = tf.ones_like(D)
     mask = tf.linalg.band_part(mask, 0, -1) - tf.linalg.band_part(mask, 0, 0)
-    mask = tf.cast(mask, bool)
+    mask = tf.cast(mask, tf.bool)
 
     return tf.boolean_mask(D, mask)

@@ -26,6 +26,12 @@ Installation is possible using `pip` directly:
 pip install tensorflow-projection-qm
 ```
 
+If you have CUDA available, explicitly enable the CUDA-capable TensorFlow dependency by installing with
+
+```bash
+pip install tensorflow-projection-qm[and-cuda]
+```
+
 ## Using
 
 The functions that calculate the quality metrics all sit in the `tensorflow_projection_qm.metrics` package.

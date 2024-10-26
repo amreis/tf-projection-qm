@@ -1,6 +1,6 @@
 [project]
 name = "tensorflow-projection-qm"
-version = "0.2.0"
+version = "0.2.1"
 authors = [{ name = "Alister Machado", email = "alister.reis@gmail.com" }]
 description = "A package with fast, TensorFlow-based implementations of projection (i.e., dimensionality reduction) quality metrics."
 readme = "README.md"
@@ -8,8 +8,8 @@ requires-python = ">=3.9"
 dependencies = [
     "numpy>=1.24,<2",
     "scipy>=1.13.1",
-    "tensorflow[and-cuda]>=2.15; python_version < '3.12'",
-    "tensorflow[and-cuda]>=2.17; python_version >= '3.12'",
+    "tensorflow>=2.15; python_version < '3.12'",
+    "tensorflow>=2.17; python_version >= '3.12'",
 ]
 classifiers = [
     "License :: OSI Approved :: MIT License",
@@ -42,6 +42,12 @@ dev-dependencies = [
     "pytest>=8.3",
     "scikit-learn>=1.5",
     "tensorboard-plugin-profile==2.17.0",
+]
+
+[project.optional-dependencies]
+and-cuda = [
+    "tensorflow[and-cuda]>=2.15; python_version < '3.12'",
+    "tensorflow[and-cuda]>=2.17; python_version >= '3.12'",
 ]
 
 [tool.ruff]

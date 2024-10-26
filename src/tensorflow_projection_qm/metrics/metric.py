@@ -91,6 +91,12 @@ class LocalizableMetric(Metric):
             return agg(per_point), per_point
         return agg(type(self)._fn(*args))
 
+    def set_if_missing(self: TLocalizableMetric, params) -> TLocalizableMetric:
+        new = super().set_if_missing(params)
+        if self._with_local:
+            new._with_local = True
+        return new
+
 
 class MetricSet:
     def __init__(self, metrics: Iterable[Metric], defaults: dict = {}) -> None:
