@@ -2040,7 +2040,7 @@ wheels = [
 
 [[package]]
 name = "tensorflow-projection-qm"
-version = "0.2.2"
+version = "0.2.3"
 source = { editable = "." }
 dependencies = [
     { name = "numpy", version = "1.24.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
