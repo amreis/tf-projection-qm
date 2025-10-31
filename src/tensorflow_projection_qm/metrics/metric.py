@@ -128,7 +128,6 @@ class MetricSet:
 
     @tf.function
     def _measure(self, X, X_2d, y=None):
-        print("Tracing!")
         return {
             self._unique_name_for(m): m.set_if_missing(self.defaults).measure_from_dict(
                 {"X": X, "X_2d": X_2d, "y": y}

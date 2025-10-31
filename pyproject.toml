@@ -1,12 +1,12 @@
 [project]
 name = "tensorflow-projection-qm"
-version = "0.2.3"
+version = "0.2.4"
 authors = [{ name = "Alister Machado", email = "alister.reis@gmail.com" }]
 description = "A package with fast, TensorFlow-based implementations of projection (i.e., dimensionality reduction) quality metrics."
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "numpy>=1.24,<2",
+    "numpy>=2",
     "scipy>=1.13.1",
     "tensorflow>=2.15; python_version < '3.12'",
     "tensorflow>=2.17; python_version >= '3.12'",
@@ -36,7 +36,9 @@ Homepage = "https://github.com/amreis/tf-projection-qm"
 
 [tool.uv]
 resolution = "lowest-direct"
-dev-dependencies = [
+
+[dependency-groups]
+dev = [
     "matplotlib>=3.9",
     "pre-commit>=3.8",
     "pytest>=8.3",
@@ -52,6 +54,9 @@ and-cuda = [
 
 [tool.ruff]
 line-length = 100
+
+[tool.ruff.lint]
+select = ["NPY201"]
 
 [tool.pytest.ini_options]
 addopts = ["--doctest-modules"]
