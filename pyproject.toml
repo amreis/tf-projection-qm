@@ -1,6 +1,6 @@
 [project]
 name = "tensorflow-projection-qm"
-version = "0.3.0"
+version = "0.3.0.post1"
 authors = [{ name = "Alister Machado", email = "alister.reis@gmail.com" }]
 description = "A package with fast, TensorFlow-based implementations of projection (i.e., dimensionality reduction) quality metrics."
 readme = "README.md"
@@ -10,6 +10,7 @@ dependencies = [
     "scipy>=1.13.1",
     "tensorflow>=2.15; python_version < '3.12'",
     "tensorflow>=2.17; python_version >= '3.12'",
+    "tensorflow>=2.20; python_version >= '3.13'",
 ]
 classifiers = [
     "License :: OSI Approved :: MIT License",
@@ -21,7 +22,6 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
 ]
 keywords = [
     "projection",
