@@ -1,6 +1,6 @@
 [project]
 name = "tensorflow-projection-qm"
-version = "0.3.0.post3"
+dynamic = ["version"]
 authors = [{ name = "Alister Machado", email = "alister.reis@gmail.com" }]
 description = "A package with fast, TensorFlow-based implementations of projection (i.e., dimensionality reduction) quality metrics."
 readme = "README.md"
@@ -65,5 +65,11 @@ select = ["NPY201"]
 addopts = ["--doctest-modules"]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "uv-dynamic-versioning"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.uv-dynamic-versioning]
+fallback-version = "0.0.0"
