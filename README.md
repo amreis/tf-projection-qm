@@ -64,6 +64,7 @@ print(f"Per-point Trustworthiness: {T_i})
 ## Implemented metrics
 
 * Average Local Error [\[7\]](#ale-and-neighbors)
+* Class Angular Distortion Index [\[12\]](#cadi)
 * Class-Aware Continuity [\[3\]](#class-aware-tnc)
 * Class-Aware Trustworthiness [\[3\]](#class-aware-tnc)
 * Continuity [\[1\]](#continuity-trustworthiness)
@@ -102,6 +103,8 @@ print(f"Per-point Trustworthiness: {T_i})
 [\[10\]](https://doi.org/10.48550/arXiv.2408.07724) <a name="scale-norm-stress"></a>Smelser et al. "Normalized Stress" is Not Normalized: How to Interpret Stress Correctly. Preprint, 2024.
 
 [\[11\]](https://doi.org/10.1109/TSMCB.2005.850151) <a name="pearson-r"></a>Geng et al. Supervised nonlinear dimensionality reduction for visualization and classification. 2005.
+
+[\[12\]](https://diglib.eg.org/handle/10.1111/cgf70465) <a name="cadi"></a>Gunaratne et al. Class Angular Distortion Index for Dimensionality Reduction. 2026.
 
 ## Why this package?
 

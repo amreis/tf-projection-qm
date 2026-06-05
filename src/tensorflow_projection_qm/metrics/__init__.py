@@ -1,5 +1,6 @@
 from . import metric
 from .avg_local_error import AverageLocalError
+from .class_angular_distortion_index import CADI
 from .continuity import ClassAwareContinuity, Continuity
 from .distance_consistency import DistanceConsistency
 from .jaccard import Jaccard
@@ -28,6 +29,7 @@ _ALL_LOCALIZABLE_METRICS: tuple[metric.LocalizableMetric, ...] = (
 )
 _ALL_METRICS: tuple[metric.Metric, ...] = _ALL_LOCALIZABLE_METRICS + (
     DistanceConsistency(),
+    CADI(),
     PearsonCorrelation(),
     ShepardGoodness(),
     NormalizedStress(),
